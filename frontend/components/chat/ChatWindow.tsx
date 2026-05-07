@@ -210,21 +210,26 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 px-4 py-3 text-white shadow-md flex-shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-            <span className="text-lg">💪</span>
+      <div
+        className="flex items-center justify-between bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 text-white shadow-md flex-shrink-0"
+        style={{
+          padding: isMobile ? '0.5rem 0.75rem' : '0.75rem 1rem',
+        }}
+      >
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+            <span className="text-base">💪</span>
           </div>
           <div>
-            <h3 className="font-semibold text-sm">IronPulse AI</h3>
-            <p className="text-[10px] text-white/90">
+            <h3 className="font-semibold text-xs">IronPulse AI</h3>
+            <p className="text-[9px] text-white/90">
               {isLoadingHistory ? 'Loading...' : isStreaming ? 'Typing...' : 'Online'}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {/* New Chat Button */}
-          {conversationId && (
+          {conversationId && !isMobile && (
             <button
               onClick={handleClearChat}
               disabled={isStreaming}
@@ -232,7 +237,7 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
               aria-label="Start new chat"
               title="Start new chat"
             >
-              <RotateCcw className="h-4 w-4" />
+              <RotateCcw className="h-3.5 w-3.5" />
             </button>
           )}
           <button
@@ -248,10 +253,11 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
       {/* Messages Container */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto px-3 py-3 space-y-3 bg-gray-50 dark:bg-gray-900"
+        className="flex-1 overflow-y-auto space-y-3 bg-gray-50 dark:bg-gray-900"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
+          padding: isMobile ? '0.5rem' : '0.75rem',
         }}
       >
         {/* Loading History Indicator */}
@@ -285,7 +291,7 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
       <div
         className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0"
         style={{
-          padding: isMobile ? '0.75rem 0.75rem calc(0.75rem + env(safe-area-inset-bottom))' : '0.75rem',
+          padding: isMobile ? '0.5rem 0.5rem calc(0.5rem + env(safe-area-inset-bottom))' : '0.75rem',
         }}
       >
         <ChatInput
