@@ -1,7 +1,7 @@
 import { ChatRequest, ChatResponse, StreamEvent } from '@/types/chat.types';
 
-// Use network IP for mobile testing
-const API_BASE_URL = 'http://192.168.0.102:5000/api/v1';
+// Use environment variable for API URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api/v1';
 
 /**
  * Send a chat message with SSE streaming
