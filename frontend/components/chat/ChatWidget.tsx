@@ -9,6 +9,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -18,13 +19,46 @@ export default function ChatWidget() {
       setIsMobile(window.innerWidth < 768);
     };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    // Track viewport height changes (for keyboard)
+    const updateViewportHeight = () => {
+      if (window.visualViewport) {
+        setViewportHeight(window.visualViewport.height);
+      } else {
+        setViewportHeight(window.innerHeight);
+      }
+    };
 
-    return () => window.removeEventListener('resize', checkMobile);
+    checkMobile();
+    updateViewportHeight();
+
+    window.addEventListener('resize', checkMobile);
+    window.addEventListener('resize', updateViewportHeight);
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateViewportHeight);
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('resize', updateViewportHeight);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', updateViewportHeight);
+      }
+    };
   }, []);
 
   if (!mounted) return null;
+
+  // Calculate chat height based on viewport (for keyboard handling)
+  const getChatHeight = () => {
+    if (!isMobile) return 'calc(100vh - 160px)';
+
+    // On mobile, use visual viewport height minus button space
+    if (viewportHeight > 0) {
+      return `${viewportHeight - 100}px`;
+    }
+    return 'calc(100vh - 100px)';
+  };
 
   const widget = (
     <>
@@ -33,14 +67,15 @@ export default function ChatWidget() {
         <div
           style={{
             position: 'fixed',
-            bottom: isMobile ? '80px' : '90px',
+            bottom: isMobile ? '10px' : '90px',
             right: isMobile ? '10px' : '20px',
             left: isMobile ? '10px' : 'auto',
             width: isMobile ? 'calc(100vw - 20px)' : 'calc(100vw - 40px)',
             maxWidth: isMobile ? '100%' : '380px',
-            height: isMobile ? 'calc(100vh - 160px)' : 'calc(100vh - 160px)',
-            maxHeight: isMobile ? '500px' : '550px',
+            height: getChatHeight(),
+            maxHeight: isMobile ? 'none' : '550px',
             zIndex: 999998,
+            transition: 'height 0.2s ease-out',
           }}
         >
           <ChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} isMobile={isMobile} />
