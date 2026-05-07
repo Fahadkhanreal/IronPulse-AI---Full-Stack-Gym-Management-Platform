@@ -33,13 +33,13 @@ export default function ChatWidget() {
         <div
           style={{
             position: 'fixed',
-            bottom: isMobile ? '0' : '90px',
-            right: isMobile ? '0' : '20px',
-            left: isMobile ? '0' : 'auto',
-            width: isMobile ? '100vw' : 'calc(100vw - 40px)',
-            maxWidth: isMobile ? '100vw' : '380px',
-            height: isMobile ? '100dvh' : 'calc(100vh - 160px)',
-            maxHeight: isMobile ? '100dvh' : '550px',
+            bottom: isMobile ? '80px' : '90px',
+            right: isMobile ? '10px' : '20px',
+            left: isMobile ? '10px' : 'auto',
+            width: isMobile ? 'calc(100vw - 20px)' : 'calc(100vw - 40px)',
+            maxWidth: isMobile ? '100%' : '380px',
+            height: isMobile ? 'calc(100vh - 160px)' : 'calc(100vh - 160px)',
+            maxHeight: isMobile ? '500px' : '550px',
             zIndex: 999998,
           }}
         >
