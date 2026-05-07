@@ -1,0 +1,160 @@
+openapi: 3.0.0
+info:
+  title: IronPulse Gym - Stripe Webhook API
+  version: 1.0.0
+  description: Webhook endpoint for receiving Stripe payment notifications
+
+servers:
+  - url: http://localhost:5000/api
+    description: Development server
+  - url: https://api.ironpulse.com/api
+    description: Production server
+
+paths:
+  /webhooks/stripe:
+    post:
+      summary: Stripe Webhook Handler
+      description: |
+        Receives webhook notifications from Stripe for payment events.
+        This endpoint is publicly accessible but requires valid Stripe signature verification.
+
+        **Important**: This endpoint does NOT use JWT authentication. Instead, it verifies
+        the Stripe-Signature header to ensure the request is from Stripe.
+
+        **Supported Events**:
+        - checkout.session.completed: Payment successful, create booking
+        - payment_intent.succeeded: Payment confirmed
+        - payment_intent.payment_failed: Payment failed
+        - charge.refunded: Payment refunded
+      tags:
+        - Webhooks
+      parameters:
+        - in: header
+          name: Stripe-Signature
+          required: true
+          schema:
+            type: string
+          description: Stripe webhook signature for verification
+          example: "t=1234567890,v1=abc123def456..."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Stripe webhook event payload
+              properties:
+                id:
+                  type: string
+                  description: Unique event identifier
+                  example: "evt_1234567890"
+                type:
+                  type: string
+                  description: Event type
+                  example: "checkout.session.completed"
+                data:
+                  type: object
+                  description: Event data containing the Stripe object
+                  properties:
+                    object:
+                      type: object
+                      description: The Stripe object (Session, PaymentIntent, etc.)
+                created:
+                  type: integer
+                  description: Unix timestamp of event creation
+                  example: 1234567890
+      responses:
+        '200':
+          description: Webhook processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  received:
+                    type: boolean
+                    example: true
+        '400':
+          description: Invalid signature or malformed payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid webhook signature"
+        '500':
+          description: Server error processing webhook
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Error processing webhook"
+
+components:
+  schemas:
+    CheckoutSessionCompleted:
+      type: object
+      description: Payload when checkout.session.completed event is received
+      properties:
+        id:
+          type: string
+          example: "cs_test_a1b2c3d4e5f6"
+        object:
+          type: string
+          example: "checkout.session"
+        amount_total:
+          type: integer
+          description: Total amount in cents
+          example: 2999
+        currency:
+          type: string
+          example: "usd"
+        customer:
+          type: string
+          description: Stripe Customer ID
+          example: "cus_abc123"
+        payment_status:
+          type: string
+          example: "paid"
+        metadata:
+          type: object
+          description: Custom metadata passed during session creation
+          properties:
+            userId:
+              type: string
+              example: "clx123abc"
+            planId:
+              type: string
+              example: "clx456def"
+
+    PaymentIntentSucceeded:
+      type: object
+      description: Payload when payment_intent.succeeded event is received
+      properties:
+        id:
+          type: string
+          example: "pi_1234567890"
+        object:
+          type: string
+          example: "payment_intent"
+        amount:
+          type: integer
+          description: Amount in cents
+          example: 2999
+        currency:
+          type: string
+          example: "usd"
+        status:
+          type: string
+          example: "succeeded"

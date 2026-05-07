@@ -1,0 +1,93 @@
+{
+  "source": "gym:fitness-advice",
+  "items": [
+    {
+      "title": "Weight Loss Guide - Complete Strategy",
+      "content": "Complete Weight Loss Strategy: 1. Calorie Deficit: Consume 300-500 calories below maintenance (use TDEE calculator). Track food with app like MyFitnessPal. 2. Macronutrients: Protein 1.6-2.2g per kg bodyweight (preserves muscle), fats 0.8-1g per kg (hormone health), fill rest with carbs. 3. Training: 3-4 strength training sessions per week (preserves muscle), 2-3 cardio sessions (burns extra calories). 4. Cardio types: HIIT 2x/week (20 min), steady-state 2x/week (30-40 min). 5. Sleep: 7-9 hours per night (affects hunger hormones). 6. Hydration: 3-4 liters water daily. 7. Consistency: Aim for 0.5-1% bodyweight loss per week (sustainable). 8. Avoid: Crash diets, excessive cardio, skipping meals, eliminating entire food groups. Expected timeline: Lose 0.5-1 kg per week safely. First 2 weeks may show more due to water weight.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "weight loss",
+        "goal": "fat loss",
+        "level": "all"
+      }
+    },
+    {
+      "title": "Muscle Building Guide - Complete Strategy",
+      "content": "Complete Muscle Building Strategy: 1. Calorie Surplus: Consume 200-300 calories above maintenance (lean bulk). 2. Macronutrients: Protein 1.6-2.2g per kg bodyweight, fats 0.8-1g per kg, carbs 3-5g per kg (fuel for training). 3. Training: Progressive overload is key - increase weight, reps, or sets over time. Train each muscle group 2x per week. 4. Volume: 10-20 sets per muscle group per week. 5. Rep ranges: 6-12 reps for hypertrophy, focus on compound movements (squat, bench, deadlift, rows). 6. Rest: 48-72 hours between training same muscle group. 7. Sleep: 8-9 hours for recovery and growth hormone release. 8. Supplements: Whey protein (convenient), creatine monohydrate (5g daily), multivitamin. Expected gains: Beginners 1-2 kg muscle per month, intermediates 0.5-1 kg per month, advanced 0.25-0.5 kg per month. Be patient - muscle building takes time.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "muscle building",
+        "goal": "muscle gain",
+        "level": "all"
+      }
+    },
+    {
+      "title": "Nutrition Basics for Fitness",
+      "content": "Nutrition Basics for Fitness Goals: Protein: Building block of muscle. Sources: chicken, fish, eggs, lean beef, Greek yogurt, protein powder. Timing: Spread throughout day, 20-40g per meal. Carbohydrates: Primary energy source. Sources: rice, oats, sweet potato, fruits, whole grains. Timing: Pre and post-workout for energy and recovery. Fats: Hormone production and vitamin absorption. Sources: avocado, nuts, olive oil, fatty fish. Don't fear fats - they're essential. Meal timing: Pre-workout (1-2 hours before): Carbs + moderate protein. Post-workout (within 2 hours): Protein + carbs for recovery. Hydration: Drink water throughout day, more during training. Supplements worth considering: Whey protein (convenience), creatine (proven for strength/size), vitamin D (if deficient), omega-3 (if don't eat fish). Avoid: Excessive processed foods, liquid calories (soda, juice), eating too little (slows metabolism).",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "nutrition",
+        "goal": "general fitness",
+        "level": "all"
+      }
+    },
+    {
+      "title": "Beginner's Guide to Starting at the Gym",
+      "content": "Beginner's Guide to Starting at the Gym: Week 1-2: Learn proper form on basic exercises. Start with machines (safer, easier to learn). Focus on: chest press, lat pulldown, leg press, shoulder press. 2-3 sets of 10-12 reps. Week 3-4: Introduce free weights. Learn: dumbbell bench press, dumbbell rows, goblet squats, dumbbell shoulder press. Week 5-8: Progress to barbell exercises with light weight. Master: bench press, squat, deadlift, overhead press. Gym etiquette: Wipe equipment after use, return weights to racks, don't hog equipment, ask for a spot if needed. Don't be intimidated: Everyone started as a beginner. Most gym-goers are supportive. Ask trainers for form checks - we're here to help! Common beginner mistakes: Doing too much too soon (leads to burnout/injury), ego lifting (using too much weight), skipping warm-up, not tracking progress. Start slow, be consistent, results will come.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "beginner guide",
+        "goal": "general fitness",
+        "level": "beginner"
+      }
+    },
+    {
+      "title": "Recovery and Rest - Why It Matters",
+      "content": "Recovery and Rest - Essential for Progress: Sleep: 7-9 hours per night. During sleep: muscle repair, growth hormone release, nervous system recovery. Poor sleep = poor gains. Rest days: Take 1-2 complete rest days per week. Muscles grow during rest, not during training. Active recovery: Light cardio, yoga, stretching on rest days improves blood flow and recovery. Nutrition for recovery: Post-workout protein (20-40g) within 2 hours, adequate carbs to replenish glycogen, stay hydrated. Stretching: 10-15 minutes post-workout improves flexibility and reduces soreness. Foam rolling: Helps with muscle tightness and recovery. Signs of overtraining: Persistent fatigue, decreased performance, increased injuries, poor sleep, irritability. If experiencing these, take extra rest days. Deload weeks: Every 4-6 weeks, reduce training volume by 40-50% for one week. Allows full recovery and prevents burnout. Remember: More training ≠ better results. Quality over quantity.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "recovery",
+        "goal": "general fitness",
+        "level": "all"
+      }
+    },
+    {
+      "title": "Common Fitness Mistakes to Avoid",
+      "content": "Common Fitness Mistakes to Avoid: 1. Not tracking progress: Keep workout log - track weights, reps, sets. Can't improve what you don't measure. 2. Ego lifting: Using too much weight with poor form. Leads to injuries, not gains. 3. Skipping legs: Don't be that person. Legs are largest muscle group - training them boosts overall muscle growth. 4. Doing too much cardio: Excessive cardio interferes with muscle building and recovery. 2-3 sessions per week is enough. 5. Not eating enough protein: Need 1.6-2.2g per kg bodyweight for muscle building. 6. Changing programs too often: Stick with a program for at least 8-12 weeks before switching. 7. Not warming up: 5-10 minutes warm-up prevents injuries and improves performance. 8. Ignoring compound movements: Squats, deadlifts, bench press, rows should be foundation of your program. 9. Training through pain: Soreness is okay, sharp pain is not. Rest and recover if injured. 10. Expecting quick results: Fitness is a marathon, not a sprint. Consistency over months and years brings results.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "mistakes",
+        "goal": "general fitness",
+        "level": "all"
+      }
+    },
+    {
+      "title": "Strength Training for Women",
+      "content": "Strength Training for Women - Myths and Facts: Myth: Lifting weights makes women bulky. Fact: Women have 10-30x less testosterone than men. You won't get bulky unless you specifically train and eat for it. Benefits of strength training for women: Builds lean muscle, increases metabolism, improves bone density (prevents osteoporosis), better body composition, functional strength for daily life. Training approach: Same principles as men - progressive overload, compound movements, adequate protein. Rep ranges: 8-12 reps for muscle building, 3-6 reps for strength. Exercises to focus on: Squats (glutes, legs), deadlifts (posterior chain), hip thrusts (glutes), bench press (upper body), rows (back), shoulder press. Menstrual cycle considerations: Week 1-2 (follicular phase): Higher energy, can handle more volume/intensity. Week 3-4 (luteal phase): May need to reduce intensity, focus on maintenance. Pregnancy: Can continue strength training with modifications - consult doctor. Postpartum: Wait 6-8 weeks, start with bodyweight, gradually progress. Don't fear the weights - embrace them!",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "women's fitness",
+        "goal": "general fitness",
+        "level": "all"
+      }
+    },
+    {
+      "title": "Supplements Guide - What Actually Works",
+      "content": "Supplements Guide - Evidence-Based Recommendations: Worth taking: 1. Whey Protein: Convenient protein source. 20-40g post-workout or as meal replacement. Not magic, just convenient. 2. Creatine Monohydrate: Most researched supplement. 5g daily (any time). Increases strength, muscle mass, recovery. Safe and effective. 3. Caffeine: Pre-workout energy. 200-400mg before training. Improves performance and focus. 4. Vitamin D: If deficient (most people are). 2000-4000 IU daily. Important for bone health, immune system, testosterone. 5. Omega-3 (Fish Oil): If don't eat fish 2-3x/week. Reduces inflammation, heart health. Maybe worth it: Multivitamin (insurance policy), Beta-Alanine (endurance), Citrulline Malate (pump). Not worth it: BCAAs (if eating enough protein), fat burners (mostly caffeine), testosterone boosters (don't work unless you have deficiency). Remember: Supplements are 5% of results. Focus on training, nutrition, sleep first. No supplement replaces hard work and consistency.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "topic": "supplements",
+        "goal": "general fitness",
+        "level": "all"
+      }
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: IronPulse Gym - Payment API
+  version: 1.0.0
+  description: API endpoints for Stripe payment processing
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Development server
+  - url: https://api.ironpulse.com/api/v1
+    description: Production server
+
+paths:
+  /payments/create-checkout-session:
+    post:
+      summary: Create Stripe Checkout Session
+      description: Creates a Stripe Checkout Session for a member to purchase a membership plan
+      tags:
+        - Payments
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - planId
+              properties:
+                planId:
+                  type: string
+                  description: ID of the plan to purchase
+                  example: "clx123abc"
+                successUrl:
+                  type: string
+                  description: URL to redirect after successful payment (optional, defaults to /payment/success)
+                  example: "http://localhost:3000/payment/success"
+                cancelUrl:
+                  type: string
+                  description: URL to redirect if payment is cancelled (optional, defaults to /payment/cancel)
+                  example: "http://localhost:3000/payment/cancel"
+      responses:
+        '201':
+          description: Checkout session created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Checkout session created successfully"
+                  data:
+                    type: object
+                    properties:
+                      sessionId:
+                        type: string
+                        description: Stripe Checkout Session ID
+                        example: "cs_test_a1b2c3d4e5f6"
+                      url:
+                        type: string
+                        description: URL to redirect user to Stripe checkout page
+                        example: "https://checkout.stripe.com/pay/cs_test_a1b2c3d4e5f6"
+        '400':
+          description: Invalid request (plan not found, missing stripePriceId, etc.)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - invalid or missing JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error (Stripe API failure, database error, etc.)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Error description"
+        error:
+          type: string
+          description: Detailed error message (development only)
+          example: "Plan not found with ID: clx123abc"

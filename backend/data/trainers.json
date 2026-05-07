@@ -1,0 +1,113 @@
+{
+  "source": "gym:trainers",
+  "items": [
+    {
+      "title": "Ahmed Khan - Strength & Conditioning Specialist",
+      "content": "Ahmed Khan is our lead strength and conditioning coach with 8 years of experience. He specializes in powerlifting, Olympic weightlifting, and functional strength training. Ahmed holds certifications from NSCA (Certified Strength and Conditioning Specialist) and USA Weightlifting Level 2. He has trained national-level athletes and helped hundreds of members achieve their strength goals. Best for: muscle building, powerlifting, athletic performance.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "ahmed-khan",
+        "specialization": ["strength", "powerlifting", "athletic-performance"],
+        "experience": 8,
+        "certifications": ["NSCA-CSCS", "USAW-L2"]
+      }
+    },
+    {
+      "title": "Sarah Ahmed - Weight Loss & Nutrition Expert",
+      "content": "Sarah Ahmed is a certified personal trainer and nutritionist with 6 years of experience specializing in weight loss and body transformation. She holds a degree in Sports Nutrition and certifications from ACE (Personal Trainer) and Precision Nutrition (Level 2). Sarah takes a holistic approach combining exercise, nutrition, and lifestyle coaching. She has helped over 200 clients lose weight sustainably. Best for: weight loss, body transformation, nutrition guidance.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "sarah-ahmed",
+        "specialization": ["weight-loss", "nutrition", "body-transformation"],
+        "experience": 6,
+        "certifications": ["ACE-CPT", "PN-L2"]
+      }
+    },
+    {
+      "title": "Bilal Raza - CrossFit & HIIT Coach",
+      "content": "Bilal Raza is our high-intensity training specialist with CrossFit Level 2 certification and 5 years of coaching experience. He specializes in CrossFit, HIIT (High-Intensity Interval Training), and metabolic conditioning. Bilal competed in regional CrossFit competitions and brings competitive energy to his training sessions. He excels at pushing clients beyond their limits safely. Best for: CrossFit, HIIT, endurance, competition prep.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "bilal-raza",
+        "specialization": ["crossfit", "hiit", "endurance"],
+        "experience": 5,
+        "certifications": ["CrossFit-L2", "CPR-AED"]
+      }
+    },
+    {
+      "title": "Fatima Malik - Yoga & Flexibility Instructor",
+      "content": "Fatima Malik is a certified yoga instructor with 7 years of teaching experience. She specializes in Hatha Yoga, Vinyasa Flow, and therapeutic yoga for injury recovery. Fatima completed her 500-hour Yoga Teacher Training in India and holds additional certifications in prenatal yoga and yoga therapy. She helps members improve flexibility, reduce stress, and recover from injuries. Best for: yoga, flexibility, stress relief, injury recovery, prenatal fitness.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "fatima-malik",
+        "specialization": ["yoga", "flexibility", "injury-recovery"],
+        "experience": 7,
+        "certifications": ["RYT-500", "Prenatal-Yoga", "Yoga-Therapy"]
+      }
+    },
+    {
+      "title": "Hassan Ali - Bodybuilding & Physique Coach",
+      "content": "Hassan Ali is a competitive bodybuilder and physique coach with 10 years of experience. He has competed in national bodybuilding championships and specializes in muscle hypertrophy, contest prep, and aesthetic physique development. Hassan holds ISSA Bodybuilding Specialist certification and has coached numerous clients to stage-ready physiques. Best for: bodybuilding, muscle gain, contest prep, aesthetic goals.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "hassan-ali",
+        "specialization": ["bodybuilding", "muscle-gain", "contest-prep"],
+        "experience": 10,
+        "certifications": ["ISSA-BS", "ISSA-CPT"]
+      }
+    },
+    {
+      "title": "Ayesha Siddiqui - Women's Fitness Specialist",
+      "content": "Ayesha Siddiqui specializes in women's fitness with focus on postpartum recovery, hormonal health, and female-specific training. She has 6 years of experience and holds certifications in Pre/Postnatal Fitness and Women's Fitness Specialist. Ayesha creates safe, effective programs for women at all life stages including pregnancy, postpartum, and menopause. Best for: women's fitness, postpartum recovery, hormonal balance, beginner-friendly training.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "ayesha-siddiqui",
+        "specialization": ["womens-fitness", "postpartum", "hormonal-health"],
+        "experience": 6,
+        "certifications": ["Pre-Postnatal-Fitness", "WFS"]
+      }
+    },
+    {
+      "title": "Usman Tariq - Sports Performance Coach",
+      "content": "Usman Tariq is a sports performance coach with 9 years of experience working with athletes from cricket, football, and martial arts. He specializes in speed, agility, power development, and sport-specific conditioning. Usman holds NSCA-CSCS certification and a degree in Exercise Science. He has worked with provincial-level cricket teams and MMA fighters. Best for: athletic performance, speed training, sport-specific conditioning, agility.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "usman-tariq",
+        "specialization": ["sports-performance", "speed", "agility"],
+        "experience": 9,
+        "certifications": ["NSCA-CSCS", "Exercise-Science-Degree"]
+      }
+    },
+    {
+      "title": "Zainab Hassan - Group Fitness Instructor",
+      "content": "Zainab Hassan is our energetic group fitness instructor specializing in Zumba, aerobics, and dance fitness. With 5 years of experience, she brings fun and motivation to every class. Zainab holds certifications in Zumba, Les Mills BodyPump, and Group Fitness Instruction. Her classes are perfect for those who love working out in a group environment with music and energy. Best for: group classes, Zumba, dance fitness, cardio, fun workouts.",
+      "category": "trainer",
+      "language": "en",
+      "metadata": {
+        "trainerId": "zainab-hassan",
+        "specialization": ["group-fitness", "zumba", "dance"],
+        "experience": 5,
+        "certifications": ["Zumba-Certified", "Les-Mills-BodyPump", "GFI"]
+      }
+    },
+    {
+      "title": "Trainer Booking and Rates",
+      "content": "Personal training sessions are 60 minutes long and can be booked through reception or our mobile app. Rates: Single session 2000 PKR, 4-session package 7000 PKR (1750 per session), 8-session package 12000 PKR (1500 per session). Premium members get 4 sessions included monthly. Elite members get 8 sessions included. Book at least 24 hours in advance. Cancellations require 12 hours notice.",
+      "category": "trainer",
+      "language": "en"
+    },
+    {
+      "title": "Trainer Specialization Guide",
+      "content": "Not sure which trainer to choose? Here's a quick guide: For weight loss → Sarah Ahmed, For muscle building → Ahmed Khan or Hassan Ali, For athletic performance → Usman Tariq, For CrossFit/HIIT → Bilal Raza, For yoga/flexibility → Fatima Malik, For women's fitness → Ayesha Siddiqui, For group classes → Zainab Hassan, For bodybuilding → Hassan Ali. All trainers offer free 15-minute consultations to discuss your goals.",
+      "category": "trainer",
+      "language": "en"
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "source": "gym:workout-guides",
+  "items": [
+    {
+      "title": "Beginner Full Body Workout - Week 1-4",
+      "content": "Beginner Full Body Workout (3 days per week): Day 1 - Chest & Triceps: Bench Press 3x10, Dumbbell Flyes 3x12, Tricep Dips 3x10, Tricep Pushdowns 3x12. Day 2 - Back & Biceps: Lat Pulldowns 3x10, Seated Rows 3x12, Bicep Curls 3x12, Hammer Curls 3x10. Day 3 - Legs & Shoulders: Squats 3x10, Leg Press 3x12, Shoulder Press 3x10, Lateral Raises 3x12. Rest 60-90 seconds between sets. Focus on proper form over heavy weight.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "beginner",
+        "duration": "45-60 minutes",
+        "frequency": "3 days per week",
+        "goal": "general fitness"
+      }
+    },
+    {
+      "title": "Weight Loss Workout Plan",
+      "content": "Weight Loss Workout Plan: Combine cardio and strength training for optimal fat loss. Monday/Wednesday/Friday: 20 minutes cardio (treadmill, bike, or rowing), followed by full body strength training (compound movements like squats, deadlifts, bench press, rows). Tuesday/Thursday: 30-40 minutes moderate intensity cardio. Saturday: HIIT training (20 minutes - 30 seconds sprint, 30 seconds rest). Sunday: Rest or light yoga. Pair with calorie deficit diet (500 calories below maintenance). Aim for 1-2 pounds weight loss per week.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "beginner-intermediate",
+        "duration": "30-60 minutes",
+        "frequency": "5-6 days per week",
+        "goal": "weight loss"
+      }
+    },
+    {
+      "title": "Muscle Building Program - Intermediate",
+      "content": "Muscle Building Program (4-day split): Day 1 - Chest & Triceps: Barbell Bench Press 4x8, Incline Dumbbell Press 4x10, Cable Flyes 3x12, Close-grip Bench Press 3x10, Tricep Extensions 3x12. Day 2 - Back & Biceps: Deadlifts 4x6, Pull-ups 4x8, Barbell Rows 4x10, Face Pulls 3x15, Barbell Curls 4x10, Preacher Curls 3x12. Day 3 - Legs: Squats 4x8, Romanian Deadlifts 4x10, Leg Press 3x12, Leg Curls 3x12, Calf Raises 4x15. Day 4 - Shoulders & Arms: Military Press 4x8, Lateral Raises 4x12, Rear Delt Flyes 3x15, Dumbbell Curls 3x10, Skull Crushers 3x10. Progressive overload: increase weight by 2.5-5% when you can complete all sets with good form.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "intermediate",
+        "duration": "60-75 minutes",
+        "frequency": "4 days per week",
+        "goal": "muscle building"
+      }
+    },
+    {
+      "title": "Chest Workout - Complete Guide",
+      "content": "Complete Chest Workout: 1. Barbell Bench Press (4 sets x 8-10 reps) - Primary mass builder. Lower bar to mid-chest, press explosively. 2. Incline Dumbbell Press (3 sets x 10-12 reps) - Targets upper chest. 30-45 degree incline. 3. Dumbbell Flyes (3 sets x 12-15 reps) - Stretch and squeeze. Keep slight bend in elbows. 4. Cable Crossovers (3 sets x 15 reps) - Finish with pump. Focus on contraction. 5. Push-ups (3 sets to failure) - Bodyweight finisher. Common mistakes: bouncing bar off chest, flaring elbows too wide, not using full range of motion. Rest 2-3 minutes between heavy sets, 60-90 seconds for isolation exercises.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "intermediate-advanced",
+        "duration": "45-60 minutes",
+        "muscleGroup": "chest",
+        "goal": "muscle building"
+      }
+    },
+    {
+      "title": "Back Workout - Complete Guide",
+      "content": "Complete Back Workout: 1. Deadlifts (4 sets x 6-8 reps) - King of back exercises. Keep back straight, drive through heels. 2. Pull-ups/Lat Pulldowns (4 sets x 8-12 reps) - Width builder. Pull to upper chest, squeeze lats. 3. Barbell Rows (4 sets x 8-10 reps) - Thickness builder. Pull to lower chest, keep core tight. 4. Seated Cable Rows (3 sets x 12 reps) - Mid-back focus. Pull to sternum, retract shoulder blades. 5. Face Pulls (3 sets x 15-20 reps) - Rear delts and upper back. Pull to face level. Form tips: avoid using momentum, focus on pulling with back muscles not arms, full stretch and contraction on each rep.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "intermediate-advanced",
+        "duration": "60-75 minutes",
+        "muscleGroup": "back",
+        "goal": "muscle building"
+      }
+    },
+    {
+      "title": "Leg Day Workout - Complete Guide",
+      "content": "Complete Leg Workout: 1. Barbell Squats (4 sets x 8-10 reps) - King of leg exercises. Depth to parallel or below. 2. Romanian Deadlifts (4 sets x 10 reps) - Hamstring focus. Keep slight knee bend, hinge at hips. 3. Leg Press (3 sets x 12-15 reps) - Quad mass builder. Feet shoulder-width, full range of motion. 4. Leg Curls (3 sets x 12 reps) - Hamstring isolation. Control the negative. 5. Leg Extensions (3 sets x 15 reps) - Quad isolation. Squeeze at top. 6. Calf Raises (4 sets x 15-20 reps) - Standing or seated. Full stretch and contraction. Common mistakes: knees caving in on squats, not going deep enough, using too much weight with poor form. Leg day is the most demanding - ensure proper warm-up and nutrition.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "intermediate-advanced",
+        "duration": "60-75 minutes",
+        "muscleGroup": "legs",
+        "goal": "muscle building"
+      }
+    },
+    {
+      "title": "HIIT Cardio for Fat Loss",
+      "content": "HIIT Cardio Protocol for Maximum Fat Loss: Warm-up: 5 minutes light cardio. Main workout (20 minutes): 30 seconds maximum effort sprint/bike/row, 30 seconds complete rest. Repeat for 20 rounds. Cool-down: 5 minutes light cardio and stretching. Frequency: 2-3 times per week (not on consecutive days). Benefits: burns more calories in less time, increases metabolism for 24-48 hours post-workout, preserves muscle mass better than steady-state cardio. Best equipment: treadmill (incline sprints), assault bike, rowing machine, or outdoor sprints. Start with 15 minutes if you're new to HIIT, gradually increase to 20-25 minutes. Always prioritize form and safety over speed.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "intermediate",
+        "duration": "20-30 minutes",
+        "frequency": "2-3 days per week",
+        "goal": "fat loss"
+      }
+    },
+    {
+      "title": "Core and Abs Workout",
+      "content": "Complete Core Workout: 1. Planks (3 sets x 60 seconds) - Full body tension, straight line from head to heels. 2. Hanging Leg Raises (3 sets x 12-15 reps) - Lower abs focus. Control the swing. 3. Cable Crunches (3 sets x 15-20 reps) - Upper abs. Crunch down, squeeze at bottom. 4. Russian Twists (3 sets x 20 reps each side) - Obliques. Use weight plate or medicine ball. 5. Dead Bugs (3 sets x 12 reps each side) - Core stability. Slow and controlled. 6. Ab Wheel Rollouts (3 sets x 10 reps) - Advanced core strength. Keep core tight throughout. Train abs 2-3 times per week. Remember: abs are made in the kitchen - visible abs require low body fat (10-12% for men, 16-20% for women).",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "all levels",
+        "duration": "20-30 minutes",
+        "muscleGroup": "core",
+        "goal": "core strength"
+      }
+    },
+    {
+      "title": "Shoulder Workout - Complete Guide",
+      "content": "Complete Shoulder Workout: 1. Military Press (4 sets x 8-10 reps) - Overall shoulder mass. Press from front of shoulders. 2. Dumbbell Lateral Raises (4 sets x 12-15 reps) - Side delts. Slight forward lean, lead with elbows. 3. Rear Delt Flyes (3 sets x 15 reps) - Rear delts. Bent over or on incline bench. 4. Front Raises (3 sets x 12 reps) - Front delts. Alternate arms or both together. 5. Face Pulls (3 sets x 20 reps) - Rear delts and rotator cuff health. Pull to face level. 6. Shrugs (3 sets x 15 reps) - Traps. Hold squeeze at top. Form tips: avoid using momentum, control the weight, full range of motion. Shoulder health is crucial - always warm up properly and don't ego lift.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "intermediate-advanced",
+        "duration": "45-60 minutes",
+        "muscleGroup": "shoulders",
+        "goal": "muscle building"
+      }
+    },
+    {
+      "title": "Arms Workout - Biceps and Triceps",
+      "content": "Complete Arms Workout: Biceps: 1. Barbell Curls (4 sets x 8-10 reps) - Mass builder. Keep elbows stationary. 2. Hammer Curls (3 sets x 12 reps) - Brachialis and forearms. Neutral grip. 3. Preacher Curls (3 sets x 12 reps) - Bicep peak. Full stretch at bottom. 4. Cable Curls (3 sets x 15 reps) - Constant tension. Squeeze at top. Triceps: 1. Close-grip Bench Press (4 sets x 8-10 reps) - Mass builder. Hands shoulder-width. 2. Skull Crushers (3 sets x 12 reps) - Long head focus. Lower to forehead. 3. Tricep Pushdowns (3 sets x 15 reps) - Lateral head. Full extension. 4. Overhead Extensions (3 sets x 12 reps) - Long head stretch. Keep elbows in. Superset biceps and triceps for maximum pump. Train arms 1-2 times per week.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "level": "intermediate",
+        "duration": "45-60 minutes",
+        "muscleGroup": "arms",
+        "goal": "muscle building"
+      }
+    }
+  ]
+}

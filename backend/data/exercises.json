@@ -1,0 +1,101 @@
+{
+  "source": "gym:exercises",
+  "items": [
+    {
+      "title": "Barbell Bench Press - Chest Exercise",
+      "content": "Barbell Bench Press: Primary muscle: Chest (pectoralis major). Secondary muscles: Triceps, front deltoids. Setup: Lie on flat bench, feet flat on floor, grip bar slightly wider than shoulder-width. Execution: Unrack bar, lower to mid-chest with control (2-3 seconds), press explosively back up. Form tips: Keep shoulder blades retracted, maintain arch in lower back, don't bounce bar off chest, keep wrists straight. Sets/Reps: 3-4 sets of 6-10 reps for strength, 3-4 sets of 8-12 reps for hypertrophy. Common mistakes: Flaring elbows too wide (increases shoulder injury risk), lifting hips off bench, not using full range of motion. Variations: Incline bench press (upper chest), decline bench press (lower chest), close-grip bench press (triceps focus).",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Barbell Bench Press",
+        "primaryMuscle": "chest",
+        "equipment": "barbell",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "title": "Barbell Squat - Leg Exercise",
+      "content": "Barbell Squat: Primary muscles: Quadriceps, glutes, hamstrings. Secondary muscles: Core, lower back, calves. Setup: Bar on upper traps (high bar) or rear delts (low bar), feet shoulder-width apart, toes slightly out. Execution: Brace core, break at hips and knees simultaneously, descend until thighs parallel or below, drive through heels to stand. Form tips: Keep chest up, knees track over toes, maintain neutral spine, full depth for maximum muscle activation. Sets/Reps: 3-5 sets of 5-8 reps for strength, 3-4 sets of 8-12 reps for hypertrophy. Common mistakes: Knees caving inward, rounding lower back, not going deep enough, rising on toes. Safety: Use safety bars, don't ego lift, warm up properly. Variations: Front squat, goblet squat, Bulgarian split squat.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Barbell Squat",
+        "primaryMuscle": "legs",
+        "equipment": "barbell",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "title": "Deadlift - Full Body Exercise",
+      "content": "Deadlift: Primary muscles: Hamstrings, glutes, lower back, traps. Secondary muscles: Forearms, core, quads. Setup: Bar over mid-foot, feet hip-width apart, grip just outside legs (double overhand or mixed grip). Execution: Brace core, hinge at hips, keep back straight, drive through heels, extend hips and knees simultaneously, stand tall with shoulders back. Form tips: Bar stays close to body throughout, neutral spine (no rounding), shoulders slightly in front of bar at start, lock out at top. Sets/Reps: 3-5 sets of 3-6 reps for strength, 3-4 sets of 6-10 reps for hypertrophy. Common mistakes: Rounding back, jerking the weight, hyperextending at top, bar drifting away from body. Safety: This is a technical lift - master form with light weight first. Variations: Romanian deadlift (hamstring focus), sumo deadlift (quad focus), trap bar deadlift (beginner-friendly).",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Deadlift",
+        "primaryMuscle": "back",
+        "equipment": "barbell",
+        "difficulty": "advanced"
+      }
+    },
+    {
+      "title": "Pull-ups - Back Exercise",
+      "content": "Pull-ups: Primary muscles: Lats (latissimus dorsi), upper back. Secondary muscles: Biceps, rear deltoids, core. Setup: Hang from bar with overhand grip, hands slightly wider than shoulders, full arm extension. Execution: Pull body up by driving elbows down and back, chin over bar, lower with control to full extension. Form tips: Engage lats not just arms, avoid swinging/kipping, full range of motion, squeeze shoulder blades at top. Sets/Reps: 3-4 sets of 6-12 reps. If can't do pull-ups: use assisted pull-up machine, resistance bands, or negative pull-ups. Common mistakes: Using momentum, not going to full extension, pulling with arms instead of back. Progression: Add weight with belt once you can do 12+ reps. Variations: Chin-ups (underhand grip, more biceps), wide-grip pull-ups (more lats), neutral grip pull-ups.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Pull-ups",
+        "primaryMuscle": "back",
+        "equipment": "pull-up bar",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "title": "Overhead Press - Shoulder Exercise",
+      "content": "Overhead Press (Military Press): Primary muscle: Shoulders (deltoids). Secondary muscles: Triceps, upper chest, core. Setup: Bar at shoulder height, grip slightly wider than shoulders, feet hip-width apart. Execution: Brace core, press bar straight up overhead, lock out arms at top, lower with control to shoulders. Form tips: Keep core tight, don't lean back excessively, bar path should be straight up, full lockout at top. Sets/Reps: 3-4 sets of 6-10 reps for strength, 3-4 sets of 8-12 reps for hypertrophy. Common mistakes: Excessive back arch (lower back injury risk), pressing forward instead of up, not locking out, using legs (unless doing push press). Variations: Seated overhead press (isolates shoulders more), dumbbell shoulder press, Arnold press, push press (uses leg drive).",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Overhead Press",
+        "primaryMuscle": "shoulders",
+        "equipment": "barbell",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "title": "Dumbbell Rows - Back Exercise",
+      "content": "Dumbbell Rows: Primary muscles: Lats, middle back, rhomboids. Secondary muscles: Biceps, rear deltoids, core. Setup: One knee and hand on bench, other foot on floor, dumbbell in free hand, back parallel to floor. Execution: Pull dumbbell to hip, leading with elbow, squeeze shoulder blade at top, lower with control. Form tips: Keep back flat, pull with back not arm, elbow stays close to body, full stretch at bottom. Sets/Reps: 3-4 sets of 8-12 reps per arm. Common mistakes: Rotating torso, using momentum, not pulling high enough, rushing the movement. Benefits: Unilateral training (fixes imbalances), less lower back stress than barbell rows, great for back thickness. Variations: Bent-over dumbbell rows (both arms), chest-supported rows, Kroc rows (high rep with momentum).",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Dumbbell Rows",
+        "primaryMuscle": "back",
+        "equipment": "dumbbell",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "title": "Leg Press - Leg Exercise",
+      "content": "Leg Press: Primary muscles: Quadriceps, glutes, hamstrings. Secondary muscles: Calves. Setup: Sit in machine, feet shoulder-width on platform, back flat against pad. Execution: Release safety, lower platform with control until knees at 90 degrees or deeper, press through heels to extend legs (don't lock out completely). Form tips: Keep lower back pressed against pad, full range of motion, control the negative, don't lock knees at top. Sets/Reps: 3-4 sets of 10-15 reps. Common mistakes: Lifting hips off pad (lower back injury risk), locking knees at top, bouncing at bottom, too narrow or wide foot placement. Foot placement variations: High on platform (more glutes/hamstrings), low on platform (more quads), wide stance (inner thighs), narrow stance (outer quads). Benefits: Safer than squats for beginners, can load heavy without balance concerns, less lower back stress.",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Leg Press",
+        "primaryMuscle": "legs",
+        "equipment": "machine",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "title": "Plank - Core Exercise",
+      "content": "Plank: Primary muscles: Core (rectus abdominis, transverse abdominis, obliques). Secondary muscles: Shoulders, glutes, quads. Setup: Forearms on ground, elbows under shoulders, body in straight line from head to heels. Execution: Brace core, squeeze glutes, hold position without sagging hips or raising butt. Form tips: Neutral spine, don't hold breath, full body tension, look at floor (neutral neck). Duration: 3-4 sets of 30-60 seconds. Progression: Increase time, add weight on back, single-arm/leg variations. Common mistakes: Sagging hips, raising butt too high, holding breath, not engaging core properly. Benefits: Builds core stability, improves posture, functional strength, low injury risk. Variations: Side plank (obliques), plank with shoulder taps, plank to push-up, RKC plank (maximum tension).",
+      "category": "workout",
+      "language": "en",
+      "metadata": {
+        "exerciseName": "Plank",
+        "primaryMuscle": "core",
+        "equipment": "bodyweight",
+        "difficulty": "beginner"
+      }
+    }
+  ]
+}

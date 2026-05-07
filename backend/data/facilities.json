@@ -1,0 +1,77 @@
+{
+  "source": "gym:facilities",
+  "items": [
+    {
+      "title": "Cardio Equipment Zone",
+      "content": "Our cardio zone features 30+ machines including: 12 treadmills with individual TV screens, 8 elliptical trainers, 6 stationary bikes, 4 rowing machines, 2 stair climbers, and 2 assault bikes. All equipment is commercial-grade from leading brands like Life Fitness and Precor. The zone has excellent ventilation, ceiling fans, and water fountains nearby.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Free Weights Area",
+      "content": "Our free weights section includes: complete dumbbell set from 2.5 kg to 50 kg, Olympic barbells and plates up to 200 kg, EZ curl bars, trap bars, and specialty bars. We have 4 power racks with safety bars, 3 squat racks, 6 adjustable benches, and 2 decline benches. Rubber flooring protects equipment and reduces noise. Chalk is available for heavy lifts.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Resistance Machines",
+      "content": "We offer 25+ resistance machines covering all major muscle groups: chest press, shoulder press, lat pulldown, seated row, leg press, leg extension, leg curl, calf raise, cable crossover stations, smith machine, and more. All machines have adjustable seats and weight stacks. Pin-loaded and plate-loaded options available. Perfect for beginners and isolation work.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Functional Training Zone",
+      "content": "Our functional training area features: TRX suspension trainers, battle ropes, kettlebells (8-32 kg), medicine balls, slam balls, resistance bands, agility ladder, plyo boxes, and Bulgarian bags. The 500 sq ft turf area is perfect for dynamic movements, sled pushes, and athletic drills. Great for CrossFit-style workouts and sports conditioning.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Group Fitness Studio",
+      "content": "Our 1200 sq ft air-conditioned group fitness studio hosts yoga, Zumba, HIIT, spinning, and other classes. Features include: sprung wooden floor, full-wall mirrors, professional sound system, yoga mats and props, and capacity for 25 participants. The studio has separate entrance and is soundproofed. Check the schedule for class timings.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Locker Rooms and Showers",
+      "content": "Separate men's and women's locker rooms with modern amenities: 100+ day lockers (bring your own lock), 50 monthly rental lockers (500 PKR/month), 8 shower cubicles with hot water, changing areas, grooming stations with mirrors and power outlets, and complimentary toiletries. Cleaned and sanitized multiple times daily. Towel service available for Elite members.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Sauna and Steam Room",
+      "content": "Premium and Elite members enjoy access to our wellness facilities: dry sauna (80-90°C) and steam room (45-50°C). Both are gender-separated and located within the locker rooms. Perfect for post-workout recovery, muscle relaxation, and detoxification. Maximum 15-minute sessions recommended. Available during all operating hours.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Juice Bar and Supplement Store",
+      "content": "Our in-house juice bar serves fresh protein shakes, smoothies, fresh juices, and healthy snacks. Popular items: whey protein shakes (300 PKR), fruit smoothies (250 PKR), energy bars (150 PKR). The supplement store stocks protein powders, pre-workouts, BCAAs, vitamins, and fitness accessories. Premium and Elite members get 10% discount on all purchases.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Parking and Accessibility",
+      "content": "Free parking available for all members with 50+ car spaces and dedicated motorcycle parking. The facility is wheelchair accessible with ramps at all entrances. Ground floor equipment area ensures easy access for members with mobility challenges. Security guards on duty 24/7. CCTV coverage throughout the premises for your safety.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "WiFi and Amenities",
+      "content": "Free high-speed WiFi available throughout the gym (network: IronPulse-Members). Additional amenities include: water purifiers on each floor, vending machines with healthy snacks, phone charging stations, first aid station, and AED (Automated External Defibrillator). Our staff is trained in basic first aid and CPR.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Cleanliness and Hygiene",
+      "content": "We maintain the highest hygiene standards: equipment sanitized every 2 hours, antibacterial wipes available at all stations, hand sanitizer dispensers throughout the facility, air purification systems, and professional deep cleaning every night. Members are required to wipe equipment after use. Masks optional but recommended during peak hours.",
+      "category": "facility",
+      "language": "en"
+    },
+    {
+      "title": "Personal Training Area",
+      "content": "Dedicated personal training zone with semi-private space for one-on-one sessions. Equipped with specialized tools: resistance bands, foam rollers, massage balls, balance boards, and assessment equipment. Trainers use this area for customized workouts, form correction, and technique training. Available by appointment only.",
+      "category": "facility",
+      "language": "en"
+    }
+  ]
+}

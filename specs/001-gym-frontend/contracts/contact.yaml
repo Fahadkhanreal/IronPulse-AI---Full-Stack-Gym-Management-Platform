@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: IronPulse Gym - Contact API
+  version: 1.0.0
+  description: Contact form submission endpoint (public)
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Local development
+  - url: https://api.ironpulse.com/api/v1
+    description: Production
+
+paths:
+  /contact:
+    post:
+      summary: Submit contact form
+      description: Submits a contact form message (public endpoint)
+      tags:
+        - Contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - message
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  maxLength: 100
+                  example: "John Doe"
+                email:
+                  type: string
+                  format: email
+                  example: "john@example.com"
+                message:
+                  type: string
+                  minLength: 10
+                  maxLength: 1000
+                  example: "I would like to know more about your membership plans."
+      responses:
+        '201':
+          description: Contact form submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Thank you for contacting us. We will get back to you soon."
+                      submissionId:
+                        type: string
+                        example: "clx1234567890abcdef"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidEmail:
+                  value:
+                    success: false
+                    error: "Invalid email format"
+                    code: "INVALID_EMAIL"
+                messageTooShort:
+                  value:
+                    success: false
+                    error: "Message must be at least 10 characters"
+                    code: "MESSAGE_TOO_SHORT"
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                success: false
+                error: "Too many requests. Please try again later."
+                code: "RATE_LIMIT_EXCEEDED"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Error message"
+        code:
+          type: string
+          example: "ERROR_CODE"

@@ -1,0 +1,101 @@
+{
+  "source": "gym:plans",
+  "items": [
+    {
+      "title": "Basic Plan - 3000 PKR/month",
+      "content": "Our Basic Plan costs 3000 PKR per month and includes: unlimited access to all gym equipment during regular hours (6 AM - 10 PM), access to locker rooms and showers, participation in all group fitness classes (Yoga, Zumba, HIIT, Spinning), free fitness assessment on signup, and access to our mobile app for workout tracking. This plan is perfect for beginners and those who prefer independent workouts.",
+      "category": "plan",
+      "language": "en",
+      "metadata": {
+        "planId": "basic",
+        "price": 3000,
+        "currency": "PKR",
+        "duration": "monthly"
+      }
+    },
+    {
+      "title": "Premium Plan - 5000 PKR/month",
+      "content": "The Premium Plan is 5000 PKR per month and includes everything in Basic Plan plus: 24/7 gym access with keycard entry, 4 personal training sessions per month (60 minutes each), monthly nutrition consultation with certified dietitian, priority booking for group classes, guest pass (2 per month), access to sauna and steam room, and 10% discount on supplements and merchandise. Ideal for serious fitness enthusiasts.",
+      "category": "plan",
+      "language": "en",
+      "metadata": {
+        "planId": "premium",
+        "price": 5000,
+        "currency": "PKR",
+        "duration": "monthly"
+      }
+    },
+    {
+      "title": "Elite Plan - 8000 PKR/month",
+      "content": "Our Elite Plan costs 8000 PKR per month and includes everything in Premium Plan plus: 8 personal training sessions per month, customized workout and meal plans updated monthly, unlimited guest passes, priority equipment access during peak hours, complimentary sports massage (1 per month), free protein shake after each workout, dedicated locker with laundry service, and access to exclusive Elite member events. The ultimate fitness experience.",
+      "category": "plan",
+      "language": "en",
+      "metadata": {
+        "planId": "elite",
+        "price": 8000,
+        "currency": "PKR",
+        "duration": "monthly"
+      }
+    },
+    {
+      "title": "Student Plan - 2000 PKR/month",
+      "content": "Special Student Plan available for 2000 PKR per month with valid student ID. Includes: gym access during off-peak hours (10 AM - 4 PM on weekdays), access to all group classes, locker room facilities, and mobile app access. Valid student ID from recognized institution required. Perfect for students on a budget who want to stay fit.",
+      "category": "plan",
+      "language": "en",
+      "metadata": {
+        "planId": "student",
+        "price": 2000,
+        "currency": "PKR",
+        "duration": "monthly"
+      }
+    },
+    {
+      "title": "Day Pass - 500 PKR",
+      "content": "Try our gym with a Day Pass for just 500 PKR. Includes: full day access to all equipment and facilities, participation in scheduled group classes, locker room and shower access. Day passes can be purchased at reception. Great for visitors or those wanting to try before committing to a membership.",
+      "category": "plan",
+      "language": "en",
+      "metadata": {
+        "planId": "day-pass",
+        "price": 500,
+        "currency": "PKR",
+        "duration": "daily"
+      }
+    },
+    {
+      "title": "Quarterly Discount",
+      "content": "Save money with our quarterly payment option! Pay for 3 months upfront and get 10% discount on any plan. Basic Plan: 8100 PKR (save 900), Premium Plan: 13500 PKR (save 1500), Elite Plan: 21600 PKR (save 2400). Payment can be made via cash, card, or bank transfer.",
+      "category": "plan",
+      "language": "en"
+    },
+    {
+      "title": "Annual Membership Benefits",
+      "content": "Commit for a year and save big! Annual memberships get 20% discount plus bonus perks: 2 months of free personal training, complimentary gym merchandise (t-shirt, bottle, bag), priority customer support, and free membership freeze (up to 1 month per year). Basic: 28800 PKR/year, Premium: 48000 PKR/year, Elite: 76800 PKR/year.",
+      "category": "plan",
+      "language": "en"
+    },
+    {
+      "title": "Corporate Packages",
+      "content": "Special corporate rates available for companies with 10+ employees. Benefits include: 25% discount on Premium and Elite plans, flexible payment terms, dedicated account manager, monthly wellness workshops, and customized fitness challenges. Contact our corporate sales team for a customized quote.",
+      "category": "plan",
+      "language": "en"
+    },
+    {
+      "title": "Family Plan",
+      "content": "Bring your family! Family Plan for 2 adults + 2 children (under 16): 12000 PKR per month. Includes Premium Plan benefits for all members, family group training sessions, kids fitness classes, and family locker room access. Each additional family member: 2500 PKR per month.",
+      "category": "plan",
+      "language": "en",
+      "metadata": {
+        "planId": "family",
+        "price": 12000,
+        "currency": "PKR",
+        "duration": "monthly"
+      }
+    },
+    {
+      "title": "Membership Freeze and Cancellation",
+      "content": "Need a break? Premium and Elite members can freeze membership for up to 2 months per year (500 PKR per month freeze fee). Basic members can freeze for 1 month (800 PKR fee). Cancellations require 30 days written notice. No refunds on prepaid memberships, but you can transfer to another person with 1000 PKR transfer fee.",
+      "category": "plan",
+      "language": "en"
+    }
+  ]
+}

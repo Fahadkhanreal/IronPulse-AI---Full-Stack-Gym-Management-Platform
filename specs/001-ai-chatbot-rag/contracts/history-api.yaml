@@ -1,0 +1,554 @@
+openapi: 3.0.3
+info:
+  title: Chat History API
+  description: User endpoint for retrieving conversation history
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Local development
+  - url: https://api.ironpulse.com/api/v1
+    description: Production
+
+paths:
+  /chat/history:
+    get:
+      summary: Get user's chat conversation history
+      description: |
+        Retrieves conversation history for the authenticated user.
+        Returns paginated list of conversations with message summaries.
+
+        **Authorization**: User can only access their own history
+        **Rate Limiting**: 20 requests per minute per user
+      operationId: getChatHistory
+      tags:
+        - Chat
+        - History
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          description: Number of conversations to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+        - name: offset
+          in: query
+          description: Number of conversations to skip (for pagination)
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: sortBy
+          in: query
+          description: Sort order for conversations
+          schema:
+            type: string
+            enum: [recent, oldest]
+            default: recent
+      responses:
+        '200':
+          description: Conversation history retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistorySuccessResponse'
+              examples:
+                withConversations:
+                  summary: User with conversation history
+                  value:
+                    success: true
+                    data:
+                      conversations:
+                        - id: "clh0987654321zyxwvutsrqp"
+                          conversationId: "clh0987654321zyxwvutsrqp"
+                          messageCount: 8
+                          firstMessage: "What are your gym timings?"
+                          lastMessage: "Thank you for the information!"
+                          createdAt: "2026-05-06T10:30:00.000Z"
+                          updatedAt: "2026-05-06T10:35:00.000Z"
+                        - id: "clh1234567890abcdefghijk"
+                          conversationId: "clh1234567890abcdefghijk"
+                          messageCount: 4
+                          firstMessage: "Tell me about your membership plans"
+                          lastMessage: "I'll think about it, thanks!"
+                          createdAt: "2026-05-05T14:20:00.000Z"
+                          updatedAt: "2026-05-05T14:25:00.000Z"
+                      total: 12
+                      limit: 20
+                      offset: 0
+                      hasMore: false
+                emptyHistory:
+                  summary: User with no conversation history
+                  value:
+                    success: true
+                    data:
+                      conversations: []
+                      total: 0
+                      limit: 20
+                      offset: 0
+                      hasMore: false
+        '401':
+          description: Unauthorized (invalid or missing JWT token)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Authentication required"
+                code: "UNAUTHORIZED"
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Rate limit exceeded. Please wait before making another request."
+                code: "RATE_LIMIT_EXCEEDED"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Failed to retrieve conversation history"
+                code: "DATABASE_ERROR"
+
+  /chat/history/{conversationId}:
+    get:
+      summary: Get full conversation by ID
+      description: |
+        Retrieves all messages for a specific conversation.
+
+        **Authorization**: User can only access their own conversations
+        **Rate Limiting**: 20 requests per minute per user
+      operationId: getConversation
+      tags:
+        - Chat
+        - History
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          description: Conversation ID
+          schema:
+            type: string
+            format: cuid
+      responses:
+        '200':
+          description: Conversation retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationSuccessResponse'
+              example:
+                success: true
+                data:
+                  id: "clh0987654321zyxwvutsrqp"
+                  conversationId: "clh0987654321zyxwvutsrqp"
+                  userId: "clh1111111111111111111111"
+                  messages:
+                    - id: "clh2222222222222222222222"
+                      role: "user"
+                      content: "What are your gym timings?"
+                      timestamp: "2026-05-06T10:30:00.000Z"
+                    - id: "clh3333333333333333333333"
+                      role: "assistant"
+                      content: "Our gym is open from 6 AM to 10 PM daily, including weekends and holidays. Premium members have 24/7 access."
+                      timestamp: "2026-05-06T10:30:02.000Z"
+                      metadata:
+                        retrievedDocs: 2
+                        tokensUsed: 45
+                        responseTime: 856
+                    - id: "clh4444444444444444444444"
+                      role: "user"
+                      content: "Do you have personal trainers?"
+                      timestamp: "2026-05-06T10:32:00.000Z"
+                    - id: "clh5555555555555555555555"
+                      role: "assistant"
+                      content: "Yes! We have certified personal trainers specializing in strength training, weight loss, and sports conditioning. Premium plan members get 2 free sessions per month."
+                      timestamp: "2026-05-06T10:32:01.500Z"
+                      metadata:
+                        retrievedDocs: 3
+                        tokensUsed: 62
+                        responseTime: 1234
+                  createdAt: "2026-05-06T10:30:00.000Z"
+                  updatedAt: "2026-05-06T10:35:00.000Z"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden (conversation belongs to another user)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "You do not have permission to access this conversation"
+                code: "FORBIDDEN"
+        '404':
+          description: Conversation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Conversation not found"
+                code: "NOT_FOUND"
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete conversation
+      description: |
+        Deletes a specific conversation and all its messages.
+
+        **Authorization**: User can only delete their own conversations
+        **Rate Limiting**: 10 requests per minute per user
+      operationId: deleteConversation
+      tags:
+        - Chat
+        - History
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          description: Conversation ID to delete
+          schema:
+            type: string
+            format: cuid
+      responses:
+        '200':
+          description: Conversation deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    enum: [true]
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum: [true]
+                      conversationId:
+                        type: string
+                        format: cuid
+              example:
+                success: true
+                data:
+                  deleted: true
+                  conversationId: "clh0987654321zyxwvutsrqp"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden (conversation belongs to another user)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Conversation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /chat/history/all:
+    delete:
+      summary: Delete all conversation history
+      description: |
+        Deletes all conversations for the authenticated user.
+
+        **Warning**: This action cannot be undone.
+        **Rate Limiting**: 5 requests per minute per user
+      operationId: deleteAllHistory
+      tags:
+        - Chat
+        - History
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: All conversations deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    enum: [true]
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: integer
+                        description: Number of conversations deleted
+              example:
+                success: true
+                data:
+                  deleted: 12
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from authentication endpoint
+
+  schemas:
+    HistorySuccessResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - conversations
+            - total
+            - limit
+            - offset
+            - hasMore
+          properties:
+            conversations:
+              type: array
+              items:
+                $ref: '#/components/schemas/ConversationSummary'
+            total:
+              type: integer
+              description: Total number of conversations for this user
+            limit:
+              type: integer
+              description: Number of conversations returned in this response
+            offset:
+              type: integer
+              description: Number of conversations skipped
+            hasMore:
+              type: boolean
+              description: Whether there are more conversations to fetch
+
+    ConversationSummary:
+      type: object
+      required:
+        - id
+        - conversationId
+        - messageCount
+        - firstMessage
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: cuid
+          description: ChatHistory record ID
+        conversationId:
+          type: string
+          format: cuid
+          description: Conversation identifier
+        messageCount:
+          type: integer
+          description: Number of messages in this conversation
+        firstMessage:
+          type: string
+          description: First user message in the conversation
+          maxLength: 100
+        lastMessage:
+          type: string
+          description: Last message in the conversation
+          maxLength: 100
+        createdAt:
+          type: string
+          format: date-time
+          description: When conversation started
+        updatedAt:
+          type: string
+          format: date-time
+          description: When conversation was last updated
+
+    ConversationSuccessResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          $ref: '#/components/schemas/Conversation'
+
+    Conversation:
+      type: object
+      required:
+        - id
+        - conversationId
+        - userId
+        - messages
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: cuid
+          description: ChatHistory record ID
+        conversationId:
+          type: string
+          format: cuid
+          description: Conversation identifier
+        userId:
+          type: string
+          format: cuid
+          description: User who owns this conversation
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Message:
+      type: object
+      required:
+        - id
+        - role
+        - content
+        - timestamp
+      properties:
+        id:
+          type: string
+          format: cuid
+          description: Unique message ID
+        role:
+          type: string
+          enum: [user, assistant, system]
+          description: Message sender role
+        content:
+          type: string
+          description: Message text content
+        timestamp:
+          type: string
+          format: date-time
+          description: When message was sent
+        metadata:
+          type: object
+          description: Optional message metadata
+          properties:
+            retrievedDocs:
+              type: integer
+              description: Number of documents retrieved for this response
+            tokensUsed:
+              type: integer
+              description: Tokens used for this message
+            responseTime:
+              type: integer
+              description: Response generation time in milliseconds
+            error:
+              type: string
+              description: Error message if generation failed
+            userContext:
+              type: boolean
+              description: Whether user context was injected
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code
+          enum:
+            - UNAUTHORIZED
+            - FORBIDDEN
+            - NOT_FOUND
+            - RATE_LIMIT_EXCEEDED
+            - DATABASE_ERROR
+            - INTERNAL_ERROR

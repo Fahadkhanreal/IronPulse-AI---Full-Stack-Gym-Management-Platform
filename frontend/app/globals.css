@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@theme {
+  /* Base theme variables */
+  --radius: 0.5rem;
+}
+
+/* Light theme (default) */
+:root {
+  --color-background: 0 0% 100%;
+  --color-foreground: 0 0% 3.9%;
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 0 0% 3.9%;
+  --color-popover: 0 0% 100%;
+  --color-popover-foreground: 0 0% 3.9%;
+  --color-primary: 0 84% 60%;
+  --color-primary-foreground: 0 0% 100%;
+  --color-secondary: 25 95% 53%;
+  --color-secondary-foreground: 0 0% 100%;
+  --color-muted: 0 0% 96.1%;
+  --color-muted-foreground: 0 0% 45.1%;
+  --color-accent: 0 0% 96.1%;
+  --color-accent-foreground: 0 0% 9%;
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 0 0% 98%;
+  --color-border: 0 0% 89.8%;
+  --color-input: 0 0% 89.8%;
+  --color-ring: 0 84% 60%;
+}
+
+/* Dark theme */
+.dark {
+  --color-background: 10 10% 4%;
+  --color-foreground: 0 0% 98%;
+  --color-card: 0 0% 8%;
+  --color-card-foreground: 0 0% 98%;
+  --color-popover: 0 0% 8%;
+  --color-popover-foreground: 0 0% 98%;
+  --color-primary: 0 84% 60%;
+  --color-primary-foreground: 0 0% 100%;
+  --color-secondary: 25 95% 53%;
+  --color-secondary-foreground: 0 0% 100%;
+  --color-muted: 0 0% 15%;
+  --color-muted-foreground: 0 0% 64%;
+  --color-accent: 0 0% 15%;
+  --color-accent-foreground: 0 0% 98%;
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 0 0% 98%;
+  --color-border: 0 0% 15%;
+  --color-input: 0 0% 15%;
+  --color-ring: 0 84% 60%;
+}
+
+/* Base styles */
+html,
+body {
+  font-feature-settings: "rlig" 1, "calt" 1;
+  overflow-x: hidden;
+  position: relative;
+}
+
+html, body, #__next, #__next > div {
+  overflow-x: visible !important;
+}
+
+* {
+  border-color: hsl(var(--color-border));
+}
+
+/* Ensure chatbot is always visible - MAXIMUM PRIORITY */
+button[aria-label="Open Gym Assistant"],
+button[aria-label="Close Gym Assistant"] {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: fixed !important;
+  z-index: 999999 !important;
+  transform: translate3d(0, 0, 0) !important;
+  will-change: transform !important;
+  backface-visibility: hidden !important;
+}
+
+/* Mobile specific - ensure button stays visible */
+@media (max-width: 640px) {
+  button[aria-label="Open Gym Assistant"],
+  button[aria-label="Close Gym Assistant"] {
+    bottom: 1rem !important;
+    right: 1rem !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
+}
+
+/* Focus indicators for keyboard navigation accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(0 84% 60%);
+  outline-offset: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid hsl(0 84% 60%);
+  outline-offset: 2px;
+}
+
+/* Custom gym aesthetic styles */
+.gym-gradient {
+  background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+}
+
+.gym-text-gradient {
+  background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

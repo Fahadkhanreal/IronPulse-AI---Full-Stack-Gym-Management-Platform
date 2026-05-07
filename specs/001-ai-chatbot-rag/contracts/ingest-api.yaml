@@ -1,0 +1,391 @@
+openapi: 3.0.3
+info:
+  title: Ingest API
+  description: Admin endpoint for knowledge base document ingestion
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Local development
+  - url: https://api.ironpulse.com/api/v1
+    description: Production
+
+paths:
+  /ingest:
+    post:
+      summary: Ingest documents into knowledge base
+      description: |
+        Admin-only endpoint to add or update documents in the knowledge base.
+        Generates embeddings and stores documents with vector indexes.
+
+        **Flow**:
+        1. Validate admin authentication
+        2. Validate document structure
+        3. Chunk large documents (if needed)
+        4. Generate embeddings (Cohere batch API)
+        5. Store documents with embeddings
+        6. Update vector indexes
+
+        **Batch Processing**: Supports up to 100 documents per request
+        **Rate Limiting**: 5 requests per minute (admin only)
+      operationId: ingestDocuments
+      tags:
+        - Admin
+        - Knowledge Base
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - documents
+              properties:
+                documents:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  description: Array of documents to ingest
+                  items:
+                    $ref: '#/components/schemas/DocumentInput'
+                autoChunk:
+                  type: boolean
+                  default: true
+                  description: Automatically chunk documents larger than 400 tokens
+                replaceExisting:
+                  type: boolean
+                  default: false
+                  description: Replace existing documents with same source identifier
+            examples:
+              singleDocument:
+                summary: Single document ingestion
+                value:
+                  documents:
+                    - content: "IronPulse Gym is open from 6 AM to 10 PM daily, including weekends and holidays. We offer 24/7 access for premium members."
+                      metadata:
+                        category: "timing"
+                        source: "admin:manual"
+                        language: "en"
+                        title: "Gym Operating Hours"
+                  autoChunk: false
+              multipleDocuments:
+                summary: Batch document ingestion
+                value:
+                  documents:
+                    - content: "Our Basic Plan costs 3000 PKR per month and includes access to all gym equipment, locker facilities, and group classes."
+                      metadata:
+                        category: "plan"
+                        source: "database:plans"
+                        entityId: "clh1234567890"
+                        language: "en"
+                    - content: "Premium Plan is 5000 PKR per month with 24/7 access, personal trainer sessions, and nutrition consultation."
+                      metadata:
+                        category: "plan"
+                        source: "database:plans"
+                        entityId: "clh0987654321"
+                        language: "en"
+                  autoChunk: true
+                  replaceExisting: true
+      responses:
+        '201':
+          description: Documents successfully ingested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestSuccessResponse'
+              examples:
+                success:
+                  summary: Successful ingestion
+                  value:
+                    success: true
+                    data:
+                      ingested: 5
+                      chunked: 2
+                      replaced: 0
+                      totalEmbeddings: 7
+                      processingTime: 2345
+        '400':
+          description: Bad request (invalid input)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidCategory:
+                  summary: Invalid category
+                  value:
+                    success: false
+                    error: "Invalid category 'invalid_cat'. Must be one of: plan, trainer, timing, faq, workout, facility, policy"
+                    code: "INVALID_CATEGORY"
+                contentTooShort:
+                  summary: Content too short
+                  value:
+                    success: false
+                    error: "Document content must be at least 10 characters"
+                    code: "CONTENT_TOO_SHORT"
+                tooManyDocuments:
+                  summary: Batch size exceeded
+                  value:
+                    success: false
+                    error: "Maximum 100 documents per request"
+                    code: "BATCH_SIZE_EXCEEDED"
+        '401':
+          description: Unauthorized (invalid or missing JWT token)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Authentication required"
+                code: "UNAUTHORIZED"
+        '403':
+          description: Forbidden (user is not admin)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Admin access required"
+                code: "FORBIDDEN"
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Rate limit exceeded. Maximum 5 requests per minute."
+                code: "RATE_LIMIT_EXCEEDED"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                embeddingError:
+                  summary: Embedding generation failed
+                  value:
+                    success: false
+                    error: "Failed to generate embeddings. Please try again."
+                    code: "EMBEDDING_ERROR"
+                databaseError:
+                  summary: Database error
+                  value:
+                    success: false
+                    error: "Failed to store documents. Please try again."
+                    code: "DATABASE_ERROR"
+
+    delete:
+      summary: Delete documents from knowledge base
+      description: |
+        Admin-only endpoint to remove documents from the knowledge base.
+        Supports deletion by document ID, source, or category.
+
+        **Rate Limiting**: 5 requests per minute (admin only)
+      operationId: deleteDocuments
+      tags:
+        - Admin
+        - Knowledge Base
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ids
+          in: query
+          description: Comma-separated document IDs to delete
+          schema:
+            type: string
+            example: "1,2,3"
+        - name: source
+          in: query
+          description: Delete all documents from this source
+          schema:
+            type: string
+            example: "admin:upload:old-guide.pdf"
+        - name: category
+          in: query
+          description: Delete all documents in this category
+          schema:
+            type: string
+            enum: [plan, trainer, timing, faq, workout, facility, policy]
+      responses:
+        '200':
+          description: Documents successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    enum: [true]
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: integer
+                        description: Number of documents deleted
+              example:
+                success: true
+                data:
+                  deleted: 12
+        '400':
+          description: Bad request (no deletion criteria provided)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Must provide at least one deletion criteria (ids, source, or category)"
+                code: "MISSING_CRITERIA"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden (not admin)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token with admin role
+
+  schemas:
+    DocumentInput:
+      type: object
+      required:
+        - content
+        - metadata
+      properties:
+        content:
+          type: string
+          minLength: 10
+          maxLength: 50000
+          description: Document text content
+        metadata:
+          $ref: '#/components/schemas/DocumentMetadata'
+
+    DocumentMetadata:
+      type: object
+      required:
+        - category
+        - source
+        - language
+      properties:
+        category:
+          type: string
+          enum: [plan, trainer, timing, faq, workout, facility, policy]
+          description: Document category for filtering
+        source:
+          type: string
+          pattern: '^[a-z]+:[a-z0-9-_:]+$'
+          description: Source identifier (format - sourceType:identifier)
+          example: "database:plans"
+        entityId:
+          type: string
+          description: Foreign key to source entity (optional)
+          example: "clh1234567890"
+        chunkIndex:
+          type: integer
+          minimum: 0
+          description: Chunk position for multi-chunk documents (optional)
+        lastUpdated:
+          type: string
+          format: date-time
+          description: ISO timestamp of source data (auto-generated if not provided)
+        language:
+          type: string
+          enum: [en, ur]
+          description: Content language
+        title:
+          type: string
+          maxLength: 200
+          description: Optional document title
+        tags:
+          type: array
+          items:
+            type: string
+          maxItems: 10
+          description: Optional tags for additional filtering
+
+    IngestSuccessResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          required:
+            - ingested
+          properties:
+            ingested:
+              type: integer
+              description: Number of documents successfully ingested
+            chunked:
+              type: integer
+              description: Number of documents that were chunked
+            replaced:
+              type: integer
+              description: Number of existing documents replaced
+            totalEmbeddings:
+              type: integer
+              description: Total number of embeddings generated
+            processingTime:
+              type: integer
+              description: Processing time in milliseconds
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code
+          enum:
+            - INVALID_CATEGORY
+            - CONTENT_TOO_SHORT
+            - CONTENT_TOO_LONG
+            - BATCH_SIZE_EXCEEDED
+            - UNAUTHORIZED
+            - FORBIDDEN
+            - RATE_LIMIT_EXCEEDED
+            - EMBEDDING_ERROR
+            - DATABASE_ERROR
+            - MISSING_CRITERIA
+            - INTERNAL_ERROR

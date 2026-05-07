@@ -1,0 +1,53 @@
+{
+  "source": "gym:timings",
+  "items": [
+    {
+      "title": "Regular Operating Hours",
+      "content": "IronPulse Gym is open from 6:00 AM to 10:00 PM daily, seven days a week. This includes weekends and most public holidays. Our extended hours ensure you can work out before work, during lunch breaks, or after your day ends.",
+      "category": "timing",
+      "language": "en"
+    },
+    {
+      "title": "Premium Member 24/7 Access",
+      "content": "Premium and Elite members enjoy 24/7 access to the gym facility. You can work out at any time that suits your schedule, including late nights and early mornings. Access is granted via your membership card at the automated entry system.",
+      "category": "timing",
+      "language": "en"
+    },
+    {
+      "title": "Peak Hours",
+      "content": "Our busiest times are typically 6:00 AM - 9:00 AM and 5:00 PM - 8:00 PM on weekdays. If you prefer a quieter workout environment, consider visiting during off-peak hours: 10:00 AM - 4:00 PM or after 8:00 PM.",
+      "category": "timing",
+      "language": "en"
+    },
+    {
+      "title": "Group Class Schedule",
+      "content": "Group fitness classes run Monday to Saturday. Morning classes start at 7:00 AM, afternoon sessions at 2:00 PM, and evening classes at 6:30 PM. Popular classes include Yoga, Zumba, HIIT, Spinning, and CrossFit. Check the monthly schedule at reception or on our app.",
+      "category": "timing",
+      "language": "en"
+    },
+    {
+      "title": "Holiday Hours",
+      "content": "The gym remains open on most public holidays with regular hours (6 AM - 10 PM). We close only on Eid-ul-Fitr and Eid-ul-Azha for two days each. Reduced hours (8 AM - 6 PM) apply on Independence Day and other major national holidays.",
+      "category": "timing",
+      "language": "en"
+    },
+    {
+      "title": "Gym Rules and Etiquette",
+      "content": "Please follow these rules: 1) Wipe down equipment after use, 2) Return weights to racks, 3) Limit cardio machine use to 30 minutes during peak hours, 4) Wear proper athletic shoes, 5) No photography without permission, 6) Keep mobile phones on silent, 7) Respect personal space.",
+      "category": "timing",
+      "language": "en"
+    },
+    {
+      "title": "Locker Room Hours",
+      "content": "Locker rooms and shower facilities are available during all operating hours. Day lockers are free to use but must be emptied daily. Monthly locker rentals are available for 500 PKR per month. Bring your own lock or purchase one at reception for 300 PKR.",
+      "category": "timing",
+      "language": "en"
+    },
+    {
+      "title": "Personal Training Sessions",
+      "content": "Personal training sessions can be scheduled Monday to Saturday between 7:00 AM and 9:00 PM. Sessions are 60 minutes long. Book at least 24 hours in advance through reception or our mobile app. Cancellations require 12 hours notice to avoid charges.",
+      "category": "timing",
+      "language": "en"
+    }
+  ]
+}

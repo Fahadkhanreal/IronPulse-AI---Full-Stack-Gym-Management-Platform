@@ -1,0 +1,328 @@
+openapi: 3.0.0
+info:
+  title: IronPulse Gym - Plans API
+  version: 1.0.0
+  description: Membership plans endpoints
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Local development
+  - url: https://api.ironpulse.com/api/v1
+    description: Production
+
+paths:
+  /plans:
+    get:
+      summary: Get all membership plans
+      description: Returns list of all available membership plans (public endpoint)
+      tags:
+        - Plans
+      responses:
+        '200':
+          description: Plans retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Plan'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      summary: Create new plan (Admin only)
+      description: Creates a new membership plan
+      tags:
+        - Plans
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - price
+                - duration
+                - features
+              properties:
+                title:
+                  type: string
+                  minLength: 2
+                  maxLength: 50
+                  example: "Premium Plan"
+                price:
+                  type: number
+                  minimum: 0
+                  example: 99.99
+                duration:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+                  example: 3
+                  description: Duration in months
+                features:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                  example: ["Unlimited gym access", "Personal trainer", "Nutrition plan"]
+      responses:
+        '201':
+          description: Plan created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Plan'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden (not admin)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /plans/{id}:
+    get:
+      summary: Get plan by ID
+      description: Returns a single plan by ID
+      tags:
+        - Plans
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "clx1234567890abcdef"
+      responses:
+        '200':
+          description: Plan retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Plan'
+        '404':
+          description: Plan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update plan (Admin only)
+      description: Updates an existing plan
+      tags:
+        - Plans
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "clx1234567890abcdef"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  minLength: 2
+                  maxLength: 50
+                price:
+                  type: number
+                  minimum: 0
+                duration:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+                features:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Plan updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Plan'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden (not admin)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Plan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete plan (Admin only)
+      description: Deletes a plan
+      tags:
+        - Plans
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "clx1234567890abcdef"
+      responses:
+        '200':
+          description: Plan deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: "Plan deleted successfully"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden (not admin)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Plan not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Plan:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "clx1234567890abcdef"
+        title:
+          type: string
+          example: "Premium Plan"
+        price:
+          type: number
+          example: 99.99
+        duration:
+          type: integer
+          example: 3
+          description: Duration in months
+        features:
+          type: array
+          items:
+            type: string
+          example: ["Unlimited gym access", "Personal trainer", "Nutrition plan"]
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-04-20T10:30:00Z"
+
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Error message"
+        code:
+          type: string
+          example: "ERROR_CODE"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

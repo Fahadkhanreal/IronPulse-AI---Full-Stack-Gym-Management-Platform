@@ -1,0 +1,283 @@
+openapi: 3.0.3
+info:
+  title: Chat API
+  description: Streaming chat endpoint for RAG-powered gym support chatbot
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Local development
+  - url: https://api.ironpulse.com/api/v1
+    description: Production
+
+paths:
+  /chat:
+    post:
+      summary: Send chat message and receive streaming response
+      description: |
+        Processes user message through RAG pipeline and streams LLM response.
+        Uses Server-Sent Events (SSE) for real-time streaming.
+
+        **Flow**:
+        1. Sanitize user input
+        2. Generate query embedding
+        3. Retrieve relevant documents (vector search)
+        4. Inject user context (if authenticated)
+        5. Stream LLM response
+        6. Persist conversation history
+
+        **Rate Limiting**: 10 requests per minute per user
+      operationId: sendChatMessage
+      tags:
+        - Chat
+      security:
+        - bearerAuth: []
+        - {}  # Optional authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+              properties:
+                message:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  description: User's chat message
+                  example: "What are your gym timings?"
+                userId:
+                  type: string
+                  format: cuid
+                  description: User ID (optional, extracted from JWT if not provided)
+                  example: "clh1234567890abcdefghijk"
+                conversationId:
+                  type: string
+                  format: cuid
+                  description: Conversation ID to continue existing conversation (optional)
+                  example: "clh0987654321zyxwvutsrqp"
+      responses:
+        '200':
+          description: Streaming response (Server-Sent Events)
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: |
+                  Server-Sent Events stream with the following event types:
+
+                  **Event: start**
+                  ```json
+                  data: {"type":"start","conversationId":"clh..."}
+                  ```
+
+                  **Event: token**
+                  ```json
+                  data: {"type":"token","content":"Hello"}
+                  ```
+
+                  **Event: done**
+                  ```json
+                  data: {"type":"done","metadata":{"tokensUsed":150,"responseTime":1234}}
+                  ```
+
+                  **Event: error**
+                  ```json
+                  data: {"type":"error","message":"Rate limit exceeded"}
+                  ```
+              examples:
+                successfulStream:
+                  summary: Successful streaming response
+                  value: |
+                    data: {"type":"start","conversationId":"clh0987654321zyxwvutsrqp"}
+
+                    data: {"type":"token","content":"Our"}
+
+                    data: {"type":"token","content":" gym"}
+
+                    data: {"type":"token","content":" is"}
+
+                    data: {"type":"token","content":" open"}
+
+                    data: {"type":"token","content":" from"}
+
+                    data: {"type":"token","content":" 6"}
+
+                    data: {"type":"token","content":"AM"}
+
+                    data: {"type":"token","content":" to"}
+
+                    data: {"type":"token","content":" 10"}
+
+                    data: {"type":"token","content":"PM"}
+
+                    data: {"type":"token","content":" daily"}
+
+                    data: {"type":"token","content":"."}
+
+                    data: {"type":"done","metadata":{"tokensUsed":45,"responseTime":856,"retrievedDocs":2}}
+        '400':
+          description: Bad request (invalid input)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                emptyMessage:
+                  summary: Empty message
+                  value:
+                    success: false
+                    error: "Message cannot be empty"
+                    code: "INVALID_INPUT"
+                messageTooLong:
+                  summary: Message exceeds max length
+                  value:
+                    success: false
+                    error: "Message must be 500 characters or less"
+                    code: "MESSAGE_TOO_LONG"
+        '401':
+          description: Unauthorized (invalid or missing JWT token)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Invalid or expired authentication token"
+                code: "UNAUTHORIZED"
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Rate limit exceeded. Please wait before sending another message."
+                code: "RATE_LIMIT_EXCEEDED"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                llmError:
+                  summary: LLM service unavailable
+                  value:
+                    success: false
+                    error: "Unable to generate response. Please try again."
+                    code: "LLM_ERROR"
+                vectorSearchError:
+                  summary: Vector search failed
+                  value:
+                    success: false
+                    error: "Unable to retrieve relevant information. Please try again."
+                    code: "VECTOR_SEARCH_ERROR"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from authentication endpoint
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+          description: Always false for error responses
+        error:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Machine-readable error code
+          enum:
+            - INVALID_INPUT
+            - MESSAGE_TOO_LONG
+            - UNAUTHORIZED
+            - RATE_LIMIT_EXCEEDED
+            - LLM_ERROR
+            - VECTOR_SEARCH_ERROR
+            - INTERNAL_ERROR
+
+    StreamEvent:
+      oneOf:
+        - $ref: '#/components/schemas/StartEvent'
+        - $ref: '#/components/schemas/TokenEvent'
+        - $ref: '#/components/schemas/DoneEvent'
+        - $ref: '#/components/schemas/ErrorEvent'
+
+    StartEvent:
+      type: object
+      required:
+        - type
+        - conversationId
+      properties:
+        type:
+          type: string
+          enum: [start]
+        conversationId:
+          type: string
+          format: cuid
+          description: Conversation ID for this chat session
+
+    TokenEvent:
+      type: object
+      required:
+        - type
+        - content
+      properties:
+        type:
+          type: string
+          enum: [token]
+        content:
+          type: string
+          description: Single token or word from LLM response
+
+    DoneEvent:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: [done]
+        metadata:
+          type: object
+          properties:
+            tokensUsed:
+              type: integer
+              description: Total tokens used (input + output)
+            responseTime:
+              type: integer
+              description: Response generation time in milliseconds
+            retrievedDocs:
+              type: integer
+              description: Number of documents retrieved from knowledge base
+
+    ErrorEvent:
+      type: object
+      required:
+        - type
+        - message
+      properties:
+        type:
+          type: string
+          enum: [error]
+        message:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
