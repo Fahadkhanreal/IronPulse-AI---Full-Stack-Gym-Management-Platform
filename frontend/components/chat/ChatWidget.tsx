@@ -53,11 +53,12 @@ export default function ChatWidget() {
   const getChatHeight = () => {
     if (!isMobile) return 'calc(100vh - 160px)';
 
-    // On mobile, use visual viewport height minus button space
+    // On mobile, use visual viewport height
     if (viewportHeight > 0) {
-      return `${viewportHeight - 100}px`;
+      // Keep chat at bottom, adjust height when keyboard opens
+      return `${Math.min(viewportHeight, window.innerHeight)}px`;
     }
-    return 'calc(100vh - 100px)';
+    return '100vh';
   };
 
   const widget = (
@@ -67,13 +68,12 @@ export default function ChatWidget() {
         <div
           style={{
             position: 'fixed',
-            top: isMobile ? '0' : 'auto',
-            bottom: isMobile ? '0' : '90px',
+            bottom: '0',
             left: isMobile ? '0' : 'auto',
             right: isMobile ? '0' : '20px',
             width: isMobile ? '100%' : 'calc(100vw - 40px)',
             maxWidth: isMobile ? '100%' : '380px',
-            height: isMobile ? getChatHeight() : 'calc(100vh - 160px)',
+            height: getChatHeight(),
             maxHeight: isMobile ? '100%' : '550px',
             zIndex: 999998,
             transition: 'height 0.2s ease-out',
