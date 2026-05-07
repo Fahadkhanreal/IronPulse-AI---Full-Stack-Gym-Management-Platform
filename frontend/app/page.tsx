@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -77,7 +76,7 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="text-xl md:text-2xl text-white/90 mb-8"
           >
-            Transform your body, elevate your mind, achieve your goals
+            Transform your body,elevate your mind, achieve your goals
           </motion.p>
 
           <motion.div
