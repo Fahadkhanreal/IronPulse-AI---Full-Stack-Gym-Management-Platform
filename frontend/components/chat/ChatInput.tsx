@@ -46,7 +46,7 @@ export default function ChatInput({
   };
 
   return (
-    <div className="flex items-end gap-2">
+    <div className="flex items-end gap-2" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
       <textarea
         ref={textareaRef}
         value={message}
@@ -56,7 +56,7 @@ export default function ChatInput({
         disabled={disabled}
         rows={1}
         className="flex-1 resize-none rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:border-orange-400 dark:focus:ring-orange-400/50 transition-all"
-        style={{ maxHeight: '100px', minHeight: '38px' }}
+        style={{ maxHeight: '100px', minHeight: '38px', minWidth: '0', boxSizing: 'border-box' }}
       />
 
       <button
