@@ -219,10 +219,9 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
       <div
         className="flex items-center justify-between bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 text-white flex-shrink-0"
         style={{
-          padding: isMobile ? '0.5rem 0.5rem' : '0.75rem 1rem',
+          padding: isMobile ? '0.4rem 0.4rem' : '0.75rem 1rem',
           boxSizing: 'border-box',
           width: '100%',
-          maxWidth: '100%',
           overflow: 'hidden',
         }}
       >
@@ -287,11 +286,10 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
       <div
         className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0"
         style={{
-          padding: isMobile ? '0.5rem' : '0.75rem',
-          paddingBottom: isMobile ? 'calc(0.5rem + env(safe-area-inset-bottom))' : '0.75rem',
+          padding: isMobile ? '0.4rem' : '0.75rem',
+          paddingBottom: isMobile ? 'calc(0.4rem + env(safe-area-inset-bottom))' : '0.75rem',
           boxSizing: 'border-box',
           width: '100%',
-          maxWidth: '100%',
           overflow: 'hidden',
         }}
       >
