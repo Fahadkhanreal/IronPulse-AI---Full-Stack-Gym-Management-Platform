@@ -204,22 +204,26 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
 
   return (
     <div
-      className="flex flex-col bg-white dark:bg-gray-800 overflow-hidden h-full w-full"
+      className="flex flex-col bg-white dark:bg-gray-800 h-full w-full"
       style={{
         borderRadius: isMobile ? '0' : '1rem',
         border: isMobile ? 'none' : '1px solid rgb(229, 231, 235)',
         boxSizing: 'border-box',
         maxWidth: '100%',
+        overflow: 'hidden',
+        margin: 0,
+        padding: 0,
       }}
     >
       {/* Header */}
       <div
-        className="flex items-center justify-between bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 text-white shadow-md flex-shrink-0"
+        className="flex items-center justify-between bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 text-white flex-shrink-0"
         style={{
-          padding: isMobile ? '0.5rem' : '0.75rem 1rem',
+          padding: isMobile ? '0.5rem 0.5rem' : '0.75rem 1rem',
           boxSizing: 'border-box',
           width: '100%',
           maxWidth: '100%',
+          overflow: 'hidden',
         }}
       >
         <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -288,6 +292,7 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
           boxSizing: 'border-box',
           width: '100%',
           maxWidth: '100%',
+          overflow: 'hidden',
         }}
       >
         <ChatInput

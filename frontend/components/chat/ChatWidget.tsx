@@ -67,16 +67,19 @@ export default function ChatWidget() {
         <div
           style={{
             position: 'fixed',
+            top: isMobile ? '0' : 'auto',
             bottom: isMobile ? '0' : '90px',
-            right: isMobile ? '0' : '20px',
             left: isMobile ? '0' : 'auto',
-            width: isMobile ? '100vw' : 'calc(100vw - 40px)',
-            maxWidth: isMobile ? '100vw' : '380px',
-            height: getChatHeight(),
-            maxHeight: isMobile ? 'none' : '550px',
+            right: isMobile ? '0' : '20px',
+            width: isMobile ? '100%' : 'calc(100vw - 40px)',
+            maxWidth: isMobile ? '100%' : '380px',
+            height: isMobile ? getChatHeight() : 'calc(100vh - 160px)',
+            maxHeight: isMobile ? '100%' : '550px',
             zIndex: 999998,
             transition: 'height 0.2s ease-out',
             overflow: 'hidden',
+            margin: 0,
+            padding: 0,
           }}
         >
           <ChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} isMobile={isMobile} />
