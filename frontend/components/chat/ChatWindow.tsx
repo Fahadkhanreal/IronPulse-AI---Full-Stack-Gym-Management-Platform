@@ -204,9 +204,11 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
 
   return (
     <div
-      className="flex flex-col rounded-2xl bg-white shadow-2xl dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden h-full w-full"
+      className="flex flex-col bg-white shadow-2xl dark:bg-gray-800 overflow-hidden h-full w-full"
       style={{
-        paddingBottom: isMobile ? 'env(safe-area-inset-bottom)' : '0',
+        borderRadius: isMobile ? '0' : '1rem',
+        border: isMobile ? 'none' : '1px solid',
+        borderColor: isMobile ? 'transparent' : 'rgb(229, 231, 235)',
       }}
     >
       {/* Header */}
