@@ -10,9 +10,10 @@ import ChatInput from './ChatInput';
 interface ChatWindowProps {
   isOpen: boolean;
   onClose: () => void;
+  isMobile?: boolean;
 }
 
-export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
+export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWindowProps) {
   const [messages, setMessages] = useState<ChatMessageType[]>([
     {
       id: '1',
@@ -202,7 +203,13 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="flex flex-col rounded-2xl bg-white shadow-2xl dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden h-full w-full">
+    <div
+      className="flex flex-col bg-white shadow-2xl dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden h-full w-full"
+      style={{
+        borderRadius: isMobile ? '0' : '1rem',
+        paddingBottom: isMobile ? 'env(safe-area-inset-bottom)' : '0',
+      }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 px-4 py-3 text-white shadow-md flex-shrink-0">
         <div className="flex items-center gap-2.5">
@@ -243,6 +250,10 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto px-3 py-3 space-y-3 bg-gray-50 dark:bg-gray-900"
+        style={{
+          WebkitOverflowScrolling: 'touch',
+          overscrollBehavior: 'contain',
+        }}
       >
         {/* Loading History Indicator */}
         {isLoadingHistory && (
@@ -272,7 +283,12 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-gray-200 p-3 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0">
+      <div
+        className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0"
+        style={{
+          padding: isMobile ? '0.75rem 0.75rem calc(0.75rem + env(safe-area-inset-bottom))' : '0.75rem',
+        }}
+      >
         <ChatInput
           onSend={handleSendMessage}
           disabled={isStreaming}

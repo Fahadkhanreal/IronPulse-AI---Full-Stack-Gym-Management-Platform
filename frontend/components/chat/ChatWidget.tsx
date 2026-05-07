@@ -8,9 +8,20 @@ import ChatWindow from './ChatWindow';
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+
+    // Detect mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   if (!mounted) return null;
@@ -22,16 +33,17 @@ export default function ChatWidget() {
         <div
           style={{
             position: 'fixed',
-            bottom: '90px',
-            right: '20px',
-            width: 'calc(100vw - 40px)',
-            maxWidth: '380px',
-            height: 'calc(100vh - 160px)',
-            maxHeight: '550px',
+            bottom: isMobile ? '0' : '90px',
+            right: isMobile ? '0' : '20px',
+            left: isMobile ? '0' : 'auto',
+            width: isMobile ? '100vw' : 'calc(100vw - 40px)',
+            maxWidth: isMobile ? '100vw' : '380px',
+            height: isMobile ? '100dvh' : 'calc(100vh - 160px)',
+            maxHeight: isMobile ? '100dvh' : '550px',
             zIndex: 999998,
           }}
         >
-          <ChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          <ChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} isMobile={isMobile} />
         </div>
       )}
 
