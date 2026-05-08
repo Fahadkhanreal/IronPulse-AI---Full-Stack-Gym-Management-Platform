@@ -221,86 +221,99 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
       <div
         className="flex items-center justify-between bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 text-white flex-shrink-0"
         style={{
-          padding: isMobile ? '0.4rem 0.4rem' : '0.75rem 1rem',
+          padding: isMobile ? '8px' : '12px 16px',
           boxSizing: 'border-box',
           width: '100%',
           maxWidth: '100%',
           overflow: 'hidden',
-          overflowX: 'hidden',
         }}
       >
-        <div className="flex items-center gap-2 flex-1 min-w-0" style={{ maxWidth: 'calc(100% - 36px)', boxSizing: 'border-box' }}>
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm flex-shrink-0">
-            <span className="text-sm">💪</span>
+        <div className="flex items-center min-w-0" style={{ gap: '8px', flex: '1', maxWidth: 'calc(100% - 36px)' }}>
+          <div className="flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm" style={{ width: '28px', height: '28px', flexShrink: 0 }}>
+            <span style={{ fontSize: '14px' }}>💪</span>
           </div>
-          <div className="min-w-0 flex-1" style={{ boxSizing: 'border-box' }}>
-            <h3 className="font-semibold text-xs truncate">IronPulse AI</h3>
-            <p className="text-[9px] text-white/90 truncate">
+          <div className="min-w-0" style={{ flex: '1' }}>
+            <h3 className="font-semibold truncate" style={{ fontSize: '12px' }}>IronPulse AI</h3>
+            <p className="truncate" style={{ fontSize: '9px', color: 'rgba(255,255,255,0.9)' }}>
               {isLoadingHistory ? 'Loading...' : isStreaming ? 'Typing...' : 'Online'}
             </p>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="rounded-full p-1 transition-colors hover:bg-white/20 active:bg-white/30 flex-shrink-0"
+          className="rounded-full transition-colors hover:bg-white/20 active:bg-white/30"
           aria-label="Close chat"
-          style={{ width: '28px', height: '28px', minWidth: '28px' }}
+          style={{
+            width: '28px',
+            height: '28px',
+            minWidth: '28px',
+            flexShrink: 0,
+            padding: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
         >
-          <X className="h-3.5 w-3.5" />
+          <X style={{ width: '14px', height: '14px' }} />
         </button>
       </div>
 
       {/* Messages Container */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto space-y-3 bg-gray-50 dark:bg-gray-900"
+        className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900"
         style={{
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
-          padding: isMobile ? '0.5rem' : '0.75rem',
+          padding: isMobile ? '8px' : '12px',
+          width: '100%',
+          maxWidth: '100%',
+          boxSizing: 'border-box',
+          overflowX: 'hidden',
         }}
       >
-        {/* Loading History Indicator */}
-        {isLoadingHistory && (
-          <div className="flex items-center justify-center gap-2 text-gray-500 py-4">
-            <Loader2 className="h-5 w-5 animate-spin" />
-            <span className="text-sm">Loading conversation history...</span>
-          </div>
-        )}
+        <div style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {/* Loading History Indicator */}
+          {isLoadingHistory && (
+            <div className="flex items-center justify-center gap-2 text-gray-500 py-4">
+              <Loader2 className="h-5 w-5 animate-spin" />
+              <span className="text-sm">Loading conversation history...</span>
+            </div>
+          )}
 
-        {messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            message={message}
-            isStreaming={isStreaming && message.id === streamingMessageId}
-          />
-        ))}
+          {messages.map((message) => (
+            <ChatMessage
+              key={message.id}
+              message={message}
+              isStreaming={isStreaming && message.id === streamingMessageId}
+            />
+          ))}
 
-        {/* Error Message */}
-        {error && (
-          <div className="flex items-start gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
-            <AlertCircle className="h-5 w-5 flex-shrink-0" />
-            <p>{error}</p>
-          </div>
-        )}
+          {/* Error Message */}
+          {error && (
+            <div className="flex items-start gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
+              <AlertCircle className="h-5 w-5 flex-shrink-0" />
+              <p>{error}</p>
+            </div>
+          )}
 
-        <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input Area */}
       <div
         className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0"
         style={{
-          padding: isMobile ? '0.4rem' : '0.75rem',
-          paddingBottom: isMobile ? 'calc(0.4rem + env(safe-area-inset-bottom))' : '0.75rem',
+          padding: isMobile ? '8px' : '12px',
+          paddingBottom: isMobile ? 'calc(8px + env(safe-area-inset-bottom))' : '12px',
           boxSizing: 'border-box',
           width: '100%',
           maxWidth: '100%',
           overflow: 'hidden',
-          overflowX: 'hidden',
         }}
       >
-        <div style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
+        <div style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
           <ChatInput
             onSend={handleSendMessage}
             disabled={isStreaming}
@@ -311,8 +324,12 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
           <button
             onClick={handleClearChat}
             disabled={isStreaming}
-            className="mt-2 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 disabled:opacity-50 transition-colors"
-            style={{ boxSizing: 'border-box' }}
+            className="mt-2 transition-colors disabled:opacity-50"
+            style={{
+              fontSize: '11px',
+              color: 'rgb(107, 114, 128)',
+              boxSizing: 'border-box'
+            }}
           >
             Clear chat
           </button>
