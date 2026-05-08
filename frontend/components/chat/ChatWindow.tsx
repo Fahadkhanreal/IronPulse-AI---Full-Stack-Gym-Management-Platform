@@ -204,15 +204,16 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
 
   return (
     <div
-      className="flex flex-col bg-white dark:bg-gray-800 h-full w-full"
+      className="flex flex-col bg-white dark:bg-gray-800 h-full"
       style={{
         borderRadius: isMobile ? '0' : '1rem',
         border: isMobile ? 'none' : '1px solid rgb(229, 231, 235)',
-        boxSizing: 'border-box',
+        width: '100%',
         maxWidth: '100%',
         overflow: 'hidden',
         margin: 0,
         padding: 0,
+        boxSizing: 'border-box',
       }}
     >
       {/* Header */}
@@ -225,11 +226,11 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
           overflow: 'hidden',
         }}
       >
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm flex-shrink-0">
-            <span className="text-base">💪</span>
+        <div className="flex items-center gap-2 flex-1 min-w-0" style={{ maxWidth: 'calc(100% - 40px)' }}>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm flex-shrink-0">
+            <span className="text-sm">💪</span>
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h3 className="font-semibold text-xs truncate">IronPulse AI</h3>
             <p className="text-[9px] text-white/90 truncate">
               {isLoadingHistory ? 'Loading...' : isStreaming ? 'Typing...' : 'Online'}
@@ -238,10 +239,11 @@ export default function ChatWindow({ isOpen, onClose, isMobile = false }: ChatWi
         </div>
         <button
           onClick={onClose}
-          className="rounded-full p-1.5 transition-colors hover:bg-white/20 active:bg-white/30 flex-shrink-0 ml-2"
+          className="rounded-full p-1 transition-colors hover:bg-white/20 active:bg-white/30 flex-shrink-0"
           aria-label="Close chat"
+          style={{ width: '28px', height: '28px' }}
         >
-          <X className="h-4 w-4" />
+          <X className="h-3.5 w-3.5" />
         </button>
       </div>
 

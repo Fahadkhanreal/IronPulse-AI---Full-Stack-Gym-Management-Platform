@@ -28,6 +28,15 @@ export default function ChatWidget() {
       }
     };
 
+    // Prevent horizontal scroll on body when chatbot is open
+    if (isOpen && isMobile) {
+      document.body.style.overflowX = 'hidden';
+      document.documentElement.style.overflowX = 'hidden';
+    } else {
+      document.body.style.overflowX = '';
+      document.documentElement.style.overflowX = '';
+    }
+
     checkMobile();
     updateViewportHeight();
 
@@ -44,8 +53,11 @@ export default function ChatWidget() {
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', updateViewportHeight);
       }
+      // Cleanup: restore scroll
+      document.body.style.overflowX = '';
+      document.documentElement.style.overflowX = '';
     };
-  }, []);
+  }, [isOpen, isMobile]);
 
   if (!mounted) return null;
 
