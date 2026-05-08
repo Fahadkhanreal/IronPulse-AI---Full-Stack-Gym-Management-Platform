@@ -46,7 +46,16 @@ export default function ChatInput({
   };
 
   return (
-    <div className="flex items-end gap-1" style={{ width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
+    <div
+      className="flex items-end gap-1"
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        overflowX: 'hidden'
+      }}
+    >
       <textarea
         ref={textareaRef}
         value={message}
@@ -56,7 +65,13 @@ export default function ChatInput({
         disabled={disabled}
         rows={1}
         className="flex-1 resize-none rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500/50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
-        style={{ maxHeight: '70px', minHeight: '34px', minWidth: '0', boxSizing: 'border-box' }}
+        style={{
+          maxHeight: '70px',
+          minHeight: '34px',
+          minWidth: '0',
+          maxWidth: '100%',
+          boxSizing: 'border-box'
+        }}
       />
 
       <button
@@ -64,6 +79,10 @@ export default function ChatInput({
         disabled={disabled || !message.trim()}
         className="flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 text-white focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Send message"
+        style={{
+          minWidth: '34px',
+          boxSizing: 'border-box'
+        }}
       >
         <Send className="h-3.5 w-3.5" />
       </button>
