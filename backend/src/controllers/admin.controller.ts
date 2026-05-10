@@ -131,7 +131,7 @@ export const getAdminBookings = async (req: Request, res: Response, next: NextFu
     });
 
     res.status(200).json(success('Bookings retrieved successfully', {
-      bookings,
+      data: bookings,
       total,
       page,
       pageSize,
@@ -187,7 +187,7 @@ export const getAdminPayments = async (req: Request, res: Response, next: NextFu
     });
 
     res.status(200).json(success('Payments retrieved successfully', {
-      payments,
+      data: payments,
       total,
       page,
       pageSize,
