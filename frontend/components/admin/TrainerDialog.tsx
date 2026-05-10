@@ -79,12 +79,31 @@ export function TrainerDialog({ open, onOpenChange, trainer, onSubmit, isLoading
     setValue('image', imageUrl);
   }, [imageUrl, setValue]);
 
-  // Reset image URL when dialog opens/closes
+  // Reset form and image URL when dialog opens/closes
   useEffect(() => {
     if (open) {
       setImageUrl(trainer?.image || '');
+      // Reset form with trainer data when editing
+      if (trainer) {
+        reset({
+          name: trainer.name,
+          specialization: trainer.specialization,
+          experience: trainer.experience,
+          image: trainer.image,
+          bio: trainer.bio || '',
+        });
+      } else {
+        // Reset to empty form when creating new
+        reset({
+          name: '',
+          specialization: '',
+          experience: 1,
+          image: '',
+          bio: '',
+        });
+      }
     }
-  }, [open, trainer]);
+  }, [open, trainer, reset]);
 
   const handleFormSubmit = (data: TrainerFormData) => {
     if (trainer) {

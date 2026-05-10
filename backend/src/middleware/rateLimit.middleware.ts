@@ -105,3 +105,61 @@ export const chatRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   maxRequests: 10,
 });
+
+/**
+ * Auth rate limiter (signup/login)
+ * Stricter limit to prevent brute force attacks
+ * 5 requests per 15 minutes per IP
+ */
+export const authRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 5,
+  keyGenerator: (req: Request) => {
+    // Always use IP for auth endpoints (even if authenticated)
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    return `auth:${ip}`;
+  },
+});
+
+/**
+ * Payment rate limiter
+ * Moderate limit for payment operations
+ * 10 requests per minute per user
+ */
+export const paymentRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 10,
+});
+
+/**
+ * Booking rate limiter
+ * 20 requests per minute per user
+ */
+export const bookingRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 20,
+});
+
+/**
+ * Admin rate limiter
+ * More lenient for admin operations
+ * 100 requests per minute per admin user
+ */
+export const adminRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 100,
+});
+
+/**
+ * Public API rate limiter
+ * For public endpoints like plans, trainers, testimonials
+ * 60 requests per minute per IP
+ */
+export const publicApiRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  maxRequests: 60,
+  keyGenerator: (req: Request) => {
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    return `public:${ip}`;
+  },
+});

@@ -13,14 +13,14 @@ model User {
   email            String         @unique
   password         String
   role             Role           @default(MEMBER)
-  stripeCustomerId String?        @unique
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
-
+  stripeCustomerId String?        @unique
   bookings         Booking[]
+  chatHistory      ChatHistory[]
   payments         Payment[]
   subscriptions    Subscription[]
-  chatHistory      ChatHistory[]
+  testimonials     Testimonial[]
 
   @@index([email])
 }
@@ -31,9 +31,8 @@ model Plan {
   price         Float
   duration      Int
   features      String[]
-  stripePriceId String?        @unique
   createdAt     DateTime       @default(now())
-
+  stripePriceId String?        @unique
   bookings      Booking[]
   payments      Payment[]
   subscriptions Subscription[]
@@ -43,14 +42,13 @@ model Booking {
   id          String        @id @default(cuid())
   userId      String
   planId      String
-  paymentId   String?
   bookingDate DateTime
   status      BookingStatus @default(PENDING)
   createdAt   DateTime      @default(now())
-
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan        Plan          @relation(fields: [planId], references: [id], onDelete: Cascade)
+  paymentId   String?
   payment     Payment?      @relation(fields: [paymentId], references: [id])
+  plan        Plan          @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([planId])
@@ -67,9 +65,8 @@ model Subscription {
   status    SubscriptionStatus @default(ACTIVE)
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
-
-  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   plan      Plan               @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([planId])
@@ -87,21 +84,22 @@ model Trainer {
 }
 
 model Testimonial {
-  id        String   @id @default(cuid())
-  name      String
-  text      String
-  rating    Int      @default(5)
-  image     String
-  role      String   @default("Member")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String            @id @default(cuid())
+  userId      String
+  text        String
+  rating      Int               @default(5)
+  image       String?
+  status      TestimonialStatus @default(PENDING)
+  submittedAt DateTime          @default(now())
+  reviewedAt  DateTime?
+  reviewedBy  String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
+  @@index([status])
   @@index([createdAt])
-}
-
-enum Role {
-  MEMBER
-  ADMIN
 }
 
 model Payment {
@@ -113,16 +111,48 @@ model Payment {
   currency        String        @default("usd")
   status          PaymentStatus @default(PENDING)
   createdAt       DateTime      @default(now())
-
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan            Plan          @relation(fields: [planId], references: [id], onDelete: Cascade)
   bookings        Booking[]
+  plan            Plan          @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([planId])
   @@index([status])
   @@index([createdAt])
   @@index([stripePaymentId])
+}
+
+// TEMPORARILY DISABLED - Enable after pgvector extension is added
+// model Document {
+//   id        Int                   @id @default(autoincrement())
+//   content   String
+//   metadata  Json
+//   embedding Unsupported("vector")
+//   createdAt DateTime              @default(now())
+//   updatedAt DateTime              @updatedAt
+//
+//   @@index([createdAt])
+//   @@index([metadata], type: Gin)
+//   @@index([embedding])
+// }
+
+model ChatHistory {
+  id             String   @id @default(cuid())
+  userId         String?
+  conversationId String   @default(cuid())
+  messages       Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([conversationId])
+  @@index([createdAt])
+}
+
+enum Role {
+  MEMBER
+  ADMIN
 }
 
 enum PaymentStatus {
@@ -145,29 +175,8 @@ enum SubscriptionStatus {
   CANCELLED
 }
 
-model Document {
-  id        Int                       @id @default(autoincrement())
-  content   String                    @db.Text
-  metadata  Json
-  embedding Unsupported("vector(1024)")
-  createdAt DateTime                  @default(now())
-  updatedAt DateTime                  @updatedAt
-
-  @@index([createdAt])
-  @@index([metadata(ops: JsonbOps)], type: Gin)
-}
-
-model ChatHistory {
-  id             String   @id @default(cuid())
-  userId         String?
-  conversationId String   @default(cuid())
-  messages       Json
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([conversationId])
-  @@index([createdAt])
+enum TestimonialStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

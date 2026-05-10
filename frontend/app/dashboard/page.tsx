@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2, Calendar, CheckCircle, Clock, TrendingUp } from 'lucide-react';
 import { useCancelBooking } from '@/hooks/useBookings';
 import { X } from 'lucide-react';
+import MyTestimonialsSection from '@/components/dashboard/MyTestimonialsSection';
 
 function DashboardContent() {
   const { user } = useAuthStore();
@@ -160,7 +161,7 @@ function DashboardContent() {
       )}
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Card className="hover:border-primary/50 transition-colors cursor-pointer" onClick={() => router.push('/plans')}>
           <CardContent className="pt-6">
             <div className="text-center">
@@ -197,6 +198,9 @@ function DashboardContent() {
           </CardContent>
         </Card>
       </div>
+
+      {/* My Testimonials Section */}
+      <MyTestimonialsSection />
     </div>
   );
 }

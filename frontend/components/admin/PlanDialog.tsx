@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -53,22 +53,39 @@ export function PlanDialog({ open, onOpenChange, plan, onSubmit, isLoading }: Pl
     reset,
   } = useForm<PlanFormData>({
     resolver: zodResolver(planSchema),
-    defaultValues: plan
-      ? {
+    defaultValues: {
+      title: '',
+      price: 0,
+      duration: 1,
+      features: '',
+      stripePriceId: '',
+    },
+  });
+
+  // Reset form with plan data when dialog opens
+  useEffect(() => {
+    if (open) {
+      if (plan) {
+        // Edit mode - pre-fill with existing data
+        reset({
           title: plan.title,
           price: plan.price,
           duration: plan.duration,
           features: plan.features.join('\n'),
           stripePriceId: plan.stripePriceId || '',
-        }
-      : {
+        });
+      } else {
+        // Create mode - reset to empty
+        reset({
           title: '',
           price: 0,
           duration: 1,
           features: '',
           stripePriceId: '',
-        },
-  });
+        });
+      }
+    }
+  }, [open, plan, reset]);
 
   const handleFormSubmit = (data: PlanFormData) => {
     const formattedData = {

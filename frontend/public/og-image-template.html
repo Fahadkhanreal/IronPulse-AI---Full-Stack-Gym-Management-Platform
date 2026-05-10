@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Decorative circles */
+    .circle-1 {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(30, 41, 59, 0.5);
+      top: -100px;
+      left: -100px;
+    }
+    .circle-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(30, 41, 59, 0.5);
+      bottom: -150px;
+      right: -150px;
+    }
+    /* Accent bar */
+    .accent-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+    }
+    /* Content container */
+    .container {
+      padding: 80px;
+      z-index: 10;
+      max-width: 900px;
+    }
+    /* Brand mark */
+    .brand-mark {
+      width: 8px;
+      height: 80px;
+      background: #ef4444;
+      border-radius: 4px;
+      margin-bottom: 30px;
+    }
+    /* Main title */
+    h1 {
+      font-size: 72px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 10px 0;
+      letter-spacing: -2px;
+    }
+    /* Subtitle */
+    h2 {
+      font-size: 48px;
+      font-weight: 600;
+      color: #ef4444;
+      margin: 0 0 40px 0;
+      letter-spacing: -1px;
+    }
+    /* Tagline */
+    .tagline {
+      font-size: 32px;
+      font-weight: 400;
+      color: #94a3b8;
+      margin: 0 0 50px 0;
+      line-height: 1.4;
+    }
+    /* Features */
+    .features {
+      font-size: 24px;
+      color: #cbd5e1;
+      line-height: 2;
+      margin-bottom: 50px;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .check {
+      color: #ef4444;
+      margin-right: 12px;
+      font-weight: bold;
+    }
+    /* CTA Button */
+    .cta {
+      display: inline-block;
+      padding: 18px 50px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+    }
+    /* Footer */
+    .footer {
+      position: absolute;
+      bottom: 30px;
+      right: 40px;
+      font-size: 20px;
+      color: #64748b;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="accent-bar"></div>
+  <div class="circle-1"></div>
+  <div class="circle-2"></div>
+
+  <div class="container">
+    <div class="brand-mark"></div>
+
+    <h1>IronPulse</h1>
+    <h2>Gym &amp; Fitness</h2>
+
+    <div class="tagline">
+      Transform Your Body, Forge Your Strength
+    </div>
+
+    <div class="features">
+      <div class="feature-item">
+        <span class="check">✓</span>
+        <span>24/7 Access</span>
+      </div>
+      <div class="feature-item">
+        <span class="check">✓</span>
+        <span>Expert Trainers</span>
+      </div>
+      <div class="feature-item">
+        <span class="check">✓</span>
+        <span>AI-Powered Support</span>
+      </div>
+    </div>
+
+    <div class="cta">Join Today</div>
+  </div>
+
+  <div class="footer">ironpulse.com</div>
+</body>
+</html>

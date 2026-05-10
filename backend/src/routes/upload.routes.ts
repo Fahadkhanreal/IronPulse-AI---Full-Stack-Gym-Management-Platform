@@ -6,6 +6,9 @@ import { upload } from '../middleware/upload.middleware';
 
 const router = Router();
 
+// Member route - for testimonials (authenticated members can upload)
+router.post('/', authenticate, upload.single('image'), uploadImage);
+
 // Admin-only routes
 router.post('/image', authenticate, requireAdmin, upload.single('image'), uploadImage);
 router.delete('/image', authenticate, requireAdmin, deleteImage);

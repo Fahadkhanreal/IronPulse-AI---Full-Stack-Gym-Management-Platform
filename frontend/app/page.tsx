@@ -330,15 +330,21 @@ export default function HomePage() {
                     <CardHeader className="relative z-10">
                       <div className="flex items-center gap-4 mb-2">
                         <div className="relative">
-                          <img
-                            src={testimonial.image}
-                            alt={testimonial.name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-primary"
-                          />
+                          {testimonial.image ? (
+                            <img
+                              src={testimonial.image}
+                              alt={testimonial.user?.name || 'User'}
+                              className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold border-2 border-primary">
+                              {(testimonial.user?.name || 'U').charAt(0).toUpperCase()}
+                            </div>
+                          )}
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{testimonial.name}</CardTitle>
-                          <p className="text-xs text-muted-foreground">{testimonial.role}</p>
+                          <CardTitle className="text-lg">{testimonial.user?.name || 'Anonymous'}</CardTitle>
+                          <p className="text-xs text-muted-foreground">Member</p>
                         </div>
                       </div>
                       <div className="flex gap-1">

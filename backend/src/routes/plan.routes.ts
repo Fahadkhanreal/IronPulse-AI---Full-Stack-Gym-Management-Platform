@@ -4,16 +4,17 @@ import { authenticate } from '../middleware/auth.middleware';
 import { requireAdmin } from '../middleware/admin.middleware';
 import { validate } from '../middleware/validate.middleware';
 import { createPlanSchema, updatePlanSchema } from '../schemas/plan.schema';
+import { publicApiRateLimit, adminRateLimit } from '../middleware/rateLimit.middleware';
 
 const router = Router();
 
-// Public routes
-router.get('/', getAllPlans);
-router.get('/:id', getPlanById);
+// Public routes (60 requests per minute per IP)
+router.get('/', publicApiRateLimit, getAllPlans);
+router.get('/:id', publicApiRateLimit, getPlanById);
 
-// Admin-only routes
-router.post('/', authenticate, requireAdmin, validate(createPlanSchema), createPlan);
-router.put('/:id', authenticate, requireAdmin, validate(updatePlanSchema), updatePlan);
-router.delete('/:id', authenticate, requireAdmin, deletePlan);
+// Admin-only routes (100 requests per minute)
+router.post('/', adminRateLimit, authenticate, requireAdmin, validate(createPlanSchema), createPlan);
+router.put('/:id', adminRateLimit, authenticate, requireAdmin, validate(updatePlanSchema), updatePlan);
+router.delete('/:id', adminRateLimit, authenticate, requireAdmin, deletePlan);
 
 export default router;

@@ -1,12 +1,14 @@
 import api from '@/lib/api';
 
+interface UploadData {
+  url: string;
+  publicId: string;
+}
+
 interface UploadResponse {
   success: boolean;
   message: string;
-  data: {
-    url: string;
-    publicId: string;
-  };
+  data: UploadData;
 }
 
 export const uploadService = {
@@ -15,13 +17,17 @@ export const uploadService = {
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = await api.post(`/upload/image?folder=${folder}`, formData, {
+    // Use /upload/image for admin (trainers) and /upload for members (testimonials)
+    const endpoint = folder === 'trainers' ? '/upload/image' : '/upload';
+
+    const response = await api.post<UploadResponse>(`${endpoint}?folder=${folder}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
 
-    return response.data;
+    // api interceptor already extracts response.data, so response is the actual data
+    return response as unknown as UploadResponse;
   },
 
   // Delete image from Cloudinary
