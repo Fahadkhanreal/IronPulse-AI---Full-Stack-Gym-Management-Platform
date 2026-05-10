@@ -64,14 +64,15 @@ export default function ChatInput({
         placeholder={placeholder}
         disabled={disabled}
         rows={1}
-        className="resize-none rounded-lg border border-gray-300 bg-white text-sm text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500/50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+        className="resize-none rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500/50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
         style={{
           maxHeight: '70px',
           minHeight: '32px',
           width: 'calc(100% - 36px)',
           padding: '6px 8px',
           boxSizing: 'border-box',
-          flex: 'none'
+          flex: 'none',
+          fontSize: '16px'
         }}
       />
 
