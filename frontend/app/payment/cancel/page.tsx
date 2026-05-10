@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { XCircle } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 export const dynamic = 'force-dynamic';
@@ -11,21 +12,22 @@ export const dynamic = 'force-dynamic';
 export default function PaymentCancelPage() {
   return (
     <div className="min-h-screen relative flex items-center justify-center">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80)',
-        }}
-      >
-        <div className="absolute inset-0 bg-black/70 dark:bg-black/60" />
-      </div>
+      {/* Background Image - Optimized */}
+      <Image
+        src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80"
+        alt="Payment background"
+        fill
+        className="object-cover"
+        quality={75}
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-black/70 dark:bg-black/60 z-10" />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 mx-4"
+        className="relative z-20 mx-4"
       >
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">

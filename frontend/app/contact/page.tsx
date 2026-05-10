@@ -4,6 +4,7 @@ import { ContactForm } from '@/components/forms/ContactForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MapPin, Phone, Mail, MessageCircle } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ContactPage() {
   const handleWhatsAppClick = () => {
@@ -17,15 +18,17 @@ export default function ContactPage() {
     <div className="min-h-screen">
       {/* Hero Banner */}
       <div className="relative h-[300px] mb-12">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=1920&q=80)',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-        <div className="relative z-10 h-full flex items-center justify-center">
+        <Image
+          src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=1920&q=80"
+          alt="Contact us background"
+          fill
+          priority
+          className="object-cover"
+          quality={75}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/50 z-10" />
+        <div className="relative z-20 h-full flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Contact Us</h1>
             <p className="text-xl text-white/90 max-w-2xl mx-auto px-4">

@@ -2,12 +2,25 @@ import { Request, Response, NextFunction } from 'express';
 import prisma from '../config/prisma';
 import { success, error } from '../utils/response';
 import { CreatePlanInput, UpdatePlanInput } from '../schemas/plan.schema';
+import { cache } from '../utils/cache';
 
 export const getAllPlans = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const cacheKey = 'plans:all';
+
+    // Try to get from cache first
+    const cachedPlans = cache.get(cacheKey);
+    if (cachedPlans) {
+      return res.status(200).json(success('Plans retrieved successfully (cached)', cachedPlans));
+    }
+
+    // If not in cache, fetch from database
     const plans = await prisma.plan.findMany({
       orderBy: { createdAt: 'desc' },
     });
+
+    // Store in cache for 5 minutes (300 seconds)
+    cache.set(cacheKey, plans, 300);
 
     res.status(200).json(success('Plans retrieved successfully', plans));
   } catch (err) {
@@ -46,6 +59,9 @@ export const createPlan = async (req: Request, res: Response, next: NextFunction
       },
     });
 
+    // Invalidate cache when new plan is created
+    cache.delete('plans:all');
+
     res.status(201).json(success('Plan created successfully', plan));
   } catch (err) {
     next(err);
@@ -71,6 +87,9 @@ export const updatePlan = async (req: Request, res: Response, next: NextFunction
       data: updateData,
     });
 
+    // Invalidate cache when plan is updated
+    cache.delete('plans:all');
+
     res.status(200).json(success('Plan updated successfully', updatedPlan));
   } catch (err) {
     next(err);
@@ -93,6 +112,9 @@ export const deletePlan = async (req: Request, res: Response, next: NextFunction
     await prisma.plan.delete({
       where: { id },
     });
+
+    // Invalidate cache when plan is deleted
+    cache.delete('plans:all');
 
     res.status(200).json(success('Plan deleted successfully', { id }));
   } catch (err) {

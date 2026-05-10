@@ -1,15 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../config/prisma';
 import { success, error } from '../utils/response';
+import { cache } from '../utils/cache';
 
 /**
  * Get all testimonials (Public)
  */
 export const getAllTestimonials = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const cacheKey = 'testimonials:all';
+
+    // Try to get from cache first
+    const cachedTestimonials = cache.get(cacheKey);
+    if (cachedTestimonials) {
+      return res.status(200).json(success('Testimonials retrieved successfully (cached)', cachedTestimonials));
+    }
+
+    // If not in cache, fetch from database
     const testimonials = await prisma.testimonial.findMany({
       orderBy: { createdAt: 'desc' },
     });
+
+    // Store in cache for 5 minutes
+    cache.set(cacheKey, testimonials, 300);
 
     res.status(200).json(success('Testimonials retrieved successfully', testimonials));
   } catch (err) {
@@ -55,6 +68,9 @@ export const createTestimonial = async (req: Request, res: Response, next: NextF
       },
     });
 
+    // Invalidate cache when new testimonial is created
+    cache.delete('testimonials:all');
+
     res.status(201).json(success('Testimonial created successfully', testimonial));
   } catch (err) {
     next(err);
@@ -88,6 +104,9 @@ export const updateTestimonial = async (req: Request, res: Response, next: NextF
       },
     });
 
+    // Invalidate cache when testimonial is updated
+    cache.delete('testimonials:all');
+
     res.status(200).json(success('Testimonial updated successfully', updatedTestimonial));
   } catch (err) {
     next(err);
@@ -112,6 +131,9 @@ export const deleteTestimonial = async (req: Request, res: Response, next: NextF
     await prisma.testimonial.delete({
       where: { id },
     });
+
+    // Invalidate cache when testimonial is deleted
+    cache.delete('testimonials:all');
 
     res.status(200).json(success('Testimonial deleted successfully', { id }));
   } catch (err) {

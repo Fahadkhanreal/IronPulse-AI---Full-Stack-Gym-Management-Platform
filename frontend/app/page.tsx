@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dumbbell, Users, Clock, Trophy, Star, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTrainers } from '@/hooks/useTrainers';
 import { useTestimonials } from '@/hooks/useTestimonials';
@@ -47,17 +48,19 @@ export default function HomePage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80)',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/70 dark:bg-black/60" />
-        </div>
+        {/* Background Image - Optimized with Next.js Image */}
+        <Image
+          src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80"
+          alt="Gym hero background"
+          fill
+          priority
+          className="object-cover"
+          quality={80}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/70 dark:bg-black/60 z-10" />
 
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -108,11 +111,15 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
+              className="relative h-[400px] md:h-[500px]"
             >
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&q=80"
                 alt="Gym Equipment"
-                className="rounded-lg shadow-2xl"
+                fill
+                className="rounded-lg shadow-2xl object-cover"
+                quality={80}
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </motion.div>
             <div>
@@ -177,18 +184,22 @@ export default function HomePage() {
               >
                 <Link href={feature.link} className="block h-full">
                   <Card className="h-full hover:border-primary hover:scale-105 transition-all duration-300 relative overflow-hidden group cursor-pointer">
-                    {/* Background Image - More visible */}
-                    <div
-                      className="absolute inset-0 bg-cover bg-center opacity-50 group-hover:opacity-60 transition-opacity duration-300"
-                      style={{ backgroundImage: `url(${feature.image})` }}
+                    {/* Background Image - Optimized with Next.js Image */}
+                    <Image
+                      src={feature.image}
+                      alt={feature.title}
+                      fill
+                      className="object-cover opacity-50 group-hover:opacity-60 transition-opacity duration-300"
+                      quality={70}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     {/* Lighter overlay for better image visibility */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-background/60 to-background/50 dark:from-background/80 dark:via-background/70 dark:to-background/60" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-background/60 to-background/50 dark:from-background/80 dark:via-background/70 dark:to-background/60 z-10" />
 
                     {/* Animated background gradient on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10" />
 
-                    <CardHeader className="relative z-10">
+                    <CardHeader className="relative z-20">
                       <div className="mb-4 text-primary transition-transform group-hover:scale-110 duration-300">
                         {feature.icon}
                       </div>

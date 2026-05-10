@@ -146,32 +146,50 @@ export async function* generateRAGResponseStream(
     // Step 3: Fetch user context if userId provided and userContext not already set
     let userContext = options.userContext;
     if (options.userId && !userContext) {
-      userContext = await buildUserContext(options.userId);
-      if (userContext) {
-        console.log(`👤 User context loaded for: ${userContext.name}`);
+      try {
+        userContext = await buildUserContext(options.userId);
+        if (userContext) {
+          console.log(`👤 User context loaded for: ${userContext.name}`);
+        }
+      } catch (contextError) {
+        console.warn('⚠️  Failed to load user context, continuing without it:', contextError);
       }
     }
 
     // Step 4: Generate query embedding
-    const queryEmbedding = await generateEmbedding(sanitized, {
-      inputType: 'search_query',
-    });
+    let queryEmbedding;
+    try {
+      queryEmbedding = await generateEmbedding(sanitized, {
+        inputType: 'search_query',
+      });
+    } catch (embeddingError) {
+      console.error('❌ Embedding generation failed:', embeddingError);
+      throw new Error('Failed to process your message. Please try again.');
+    }
 
     // Step 5: Retrieve relevant documents
-    const retrievedDocs = await vectorSearch(queryEmbedding, {
-      limit: 5,
-      threshold: 0.3,
-      language,
-    });
-
-    console.log(`📚 Retrieved ${retrievedDocs.length} relevant documents`);
+    let retrievedDocs = [];
+    try {
+      retrievedDocs = await vectorSearch(queryEmbedding, {
+        limit: 5,
+        threshold: 0.3,
+        language,
+      });
+      console.log(`📚 Retrieved ${retrievedDocs.length} relevant documents`);
+    } catch (searchError) {
+      console.warn('⚠️  Vector search failed, continuing without context:', searchError);
+    }
 
     // Step 6: Fetch real-time gym data if query is about trainers/plans/testimonials
     let realTimeGymData = '';
     if (isQueryAboutGymData(sanitized)) {
-      console.log('🔍 Query is about gym data - fetching real-time data from database');
-      const gymData = await getGymData();
-      realTimeGymData = formatGymDataForContext(gymData);
+      try {
+        console.log('🔍 Query is about gym data - fetching real-time data from database');
+        const gymData = await getGymData();
+        realTimeGymData = formatGymDataForContext(gymData);
+      } catch (gymDataError) {
+        console.warn('⚠️  Failed to fetch gym data, continuing without it:', gymDataError);
+      }
     }
 
     // Step 7: Build system prompt with context
@@ -193,20 +211,41 @@ export async function* generateRAGResponseStream(
     messages.push({ role: 'user', content: sanitized });
 
     // Step 9: Generate streaming response with Groq
-    const stream = await groq.chat.completions.create({
-      model: GROQ_MODEL,
-      messages,
-      temperature: 0.7,
-      max_tokens: 500,
-      top_p: 0.9,
-      stream: true,
-    });
+    let tokenCount = 0;
+    try {
+      const stream = await groq.chat.completions.create({
+        model: GROQ_MODEL,
+        messages,
+        temperature: 0.7,
+        max_tokens: 500,
+        top_p: 0.9,
+        stream: true,
+      });
 
-    // Step 8: Stream tokens
-    for await (const chunk of stream) {
-      const token = chunk.choices[0]?.delta?.content || '';
-      if (token) {
-        yield token;
+      // Step 10: Stream tokens
+      for await (const chunk of stream) {
+        const token = chunk.choices[0]?.delta?.content || '';
+        if (token) {
+          tokenCount++;
+          yield token;
+        }
+      }
+
+      // If no tokens were received, yield a fallback message
+      if (tokenCount === 0) {
+        console.warn('⚠️  No tokens received from Groq, sending fallback message');
+        yield "I apologize, but I'm having trouble generating a response right now. Please try asking your question again in a moment.";
+      }
+    } catch (groqError: any) {
+      console.error('❌ Groq API error:', groqError);
+
+      // Check for specific error types
+      if (groqError.message?.includes('rate_limit') || groqError.status === 429) {
+        yield "I'm currently experiencing high demand. Please wait a moment and try again.";
+      } else if (groqError.message?.includes('timeout')) {
+        yield "The request took too long to process. Please try with a shorter question.";
+      } else {
+        yield "I apologize, but I'm having technical difficulties. Please try again in a moment.";
       }
     }
   } catch (error) {

@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    // Add quality values used in the project
+    qualities: [70, 75, 80],
   },
   // Enable compression
   compress: true,

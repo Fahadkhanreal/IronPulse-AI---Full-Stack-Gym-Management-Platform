@@ -1,15 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../config/prisma';
 import { success, error } from '../utils/response';
+import { cache } from '../utils/cache';
 
 /**
  * Get all trainers (Public)
  */
 export const getAllTrainers = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const cacheKey = 'trainers:all';
+
+    // Try to get from cache first
+    const cachedTrainers = cache.get(cacheKey);
+    if (cachedTrainers) {
+      return res.status(200).json(success('Trainers retrieved successfully (cached)', cachedTrainers));
+    }
+
+    // If not in cache, fetch from database
     const trainers = await prisma.trainer.findMany({
       orderBy: { experience: 'desc' },
     });
+
+    // Store in cache for 5 minutes
+    cache.set(cacheKey, trainers, 300);
 
     res.status(200).json(success('Trainers retrieved successfully', trainers));
   } catch (err) {
@@ -55,6 +68,9 @@ export const createTrainer = async (req: Request, res: Response, next: NextFunct
       },
     });
 
+    // Invalidate cache when new trainer is created
+    cache.delete('trainers:all');
+
     res.status(201).json(success('Trainer created successfully', trainer));
   } catch (err) {
     next(err);
@@ -88,6 +104,9 @@ export const updateTrainer = async (req: Request, res: Response, next: NextFunct
       },
     });
 
+    // Invalidate cache when trainer is updated
+    cache.delete('trainers:all');
+
     res.status(200).json(success('Trainer updated successfully', updatedTrainer));
   } catch (err) {
     next(err);
@@ -112,6 +131,9 @@ export const deleteTrainer = async (req: Request, res: Response, next: NextFunct
     await prisma.trainer.delete({
       where: { id },
     });
+
+    // Invalidate cache when trainer is deleted
+    cache.delete('trainers:all');
 
     res.status(200).json(success('Trainer deleted successfully', { id }));
   } catch (err) {

@@ -2,8 +2,23 @@
 
 import { ChatMessage as ChatMessageType } from '@/types/chat.types';
 import { User, Dumbbell, Loader2 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import dynamic from 'next/dynamic';
+
+// Dynamic imports for heavy libraries (only load when chatbot is used)
+const ReactMarkdown = dynamic(() => import('react-markdown'), {
+  loading: () => <div className="text-sm">Loading...</div>,
+  ssr: false,
+});
+
+const SyntaxHighlighter = dynamic(
+  () => import('react-syntax-highlighter').then((mod) => mod.Prism),
+  {
+    loading: () => <div className="text-xs">Loading code...</div>,
+    ssr: false,
+  }
+);
+
+// Import styles separately
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface ChatMessageProps {

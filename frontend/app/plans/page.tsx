@@ -10,6 +10,7 @@ import { PlanCardSkeleton } from '@/components/common/PlanCardSkeleton';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function PlansPage() {
   const { data: plans, isLoading } = usePlans();
@@ -38,15 +39,17 @@ export default function PlansPage() {
     <div className="min-h-screen">
       {/* Hero Banner */}
       <div className="relative h-[300px] mb-12">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80)',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-        <div className="relative z-10 h-full flex items-center justify-center">
+        <Image
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=80"
+          alt="Membership plans background"
+          fill
+          priority
+          className="object-cover"
+          quality={75}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/50 z-10" />
+        <div className="relative z-20 h-full flex items-center justify-center">
           <div className="text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}

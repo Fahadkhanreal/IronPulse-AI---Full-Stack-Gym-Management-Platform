@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Loader2, XCircle } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useVerifyPayment } from '@/lib/hooks/usePayment';
 
@@ -19,17 +20,18 @@ function PaymentSuccessContent() {
   if (isLoading) {
     return (
       <div className="min-h-screen relative flex items-center justify-center">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80)',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/70 dark:bg-black/60" />
-        </div>
+        {/* Background Image - Optimized */}
+        <Image
+          src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80"
+          alt="Payment background"
+          fill
+          className="object-cover"
+          quality={75}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/70 dark:bg-black/60 z-10" />
 
-        <Card className="w-full max-w-md relative z-10 mx-4">
+        <Card className="w-full max-w-md relative z-20 mx-4">
           <CardContent className="pt-6 text-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
             <p className="text-lg">Verifying your payment...</p>
@@ -42,21 +44,22 @@ function PaymentSuccessContent() {
   if (isError || !verification?.verified) {
     return (
       <div className="min-h-screen relative flex items-center justify-center">
-        {/* Background Image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80)',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/70 dark:bg-black/60" />
-        </div>
+        {/* Background Image - Optimized */}
+        <Image
+          src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80"
+          alt="Payment background"
+          fill
+          className="object-cover"
+          quality={75}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-black/70 dark:bg-black/60 z-10" />
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="relative z-10 mx-4"
+          className="relative z-20 mx-4"
         >
           <Card className="w-full max-w-md">
             <CardHeader className="text-center">
@@ -101,21 +104,22 @@ function PaymentSuccessContent() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80)',
-        }}
-      >
-        <div className="absolute inset-0 bg-black/70 dark:bg-black/60" />
-      </div>
+      {/* Background Image - Optimized */}
+      <Image
+        src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1920&q=80"
+        alt="Payment background"
+        fill
+        className="object-cover"
+        quality={75}
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-black/70 dark:bg-black/60 z-10" />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 mx-4"
+        className="relative z-20 mx-4"
       >
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
