@@ -109,11 +109,11 @@ export const chatRateLimit = rateLimit({
 /**
  * Auth rate limiter (signup/login)
  * Stricter limit to prevent brute force attacks
- * 5 requests per 15 minutes per IP
+ * 15 requests per 5 minutes per IP (more lenient for legitimate users)
  */
 export const authRateLimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  maxRequests: 5,
+  windowMs: 5 * 60 * 1000, // 5 minutes (reduced from 15)
+  maxRequests: 15, // Increased from 5 to 15
   keyGenerator: (req: Request) => {
     // Always use IP for auth endpoints (even if authenticated)
     const ip = req.ip || req.socket.remoteAddress || 'unknown';
