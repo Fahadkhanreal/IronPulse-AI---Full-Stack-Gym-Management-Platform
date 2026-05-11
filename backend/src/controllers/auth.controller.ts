@@ -4,6 +4,7 @@ import { hash, compare } from '../utils/password';
 import { sign } from '../utils/jwt';
 import { success, error } from '../utils/response';
 import { SignupInput, LoginInput } from '../schemas/auth.schema';
+import crypto from 'crypto';
 
 export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -91,6 +92,96 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     };
 
     res.status(200).json(success('Login successful', { user: userData, token }));
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Forgot Password - Generate reset token and send email
+ */
+export const forgotPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { email } = req.body;
+
+    // Find user by email
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    // Always return success to prevent email enumeration
+    if (!user) {
+      res.status(200).json(success('If the email exists, a reset link has been sent', {}));
+      return;
+    }
+
+    // Generate secure reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+
+    // Save token to database
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetToken,
+        resetTokenExpiry,
+      },
+    });
+
+    // TODO: Send email with reset link
+    // For now, we'll just log it (in production, use nodemailer or similar)
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    console.log('🔐 Password Reset Link:', resetUrl);
+    console.log('📧 Send this link to:', email);
+
+    // In production, send email here:
+    // await sendPasswordResetEmail(email, resetUrl);
+
+    res.status(200).json(success('If the email exists, a reset link has been sent', {
+      // Only include in development
+      ...(process.env.NODE_ENV === 'development' && { resetUrl }),
+    }));
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Reset Password - Verify token and update password
+ */
+export const resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { token, password } = req.body;
+
+    // Find user with valid reset token
+    const user = await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpiry: {
+          gt: new Date(), // Token not expired
+        },
+      },
+    });
+
+    if (!user) {
+      res.status(400).json(error('Password reset failed', 'Invalid or expired reset token'));
+      return;
+    }
+
+    // Hash new password
+    const hashedPassword = await hash(password);
+
+    // Update password and clear reset token
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
+    });
+
+    res.status(200).json(success('Password reset successful', {}));
   } catch (err) {
     next(err);
   }

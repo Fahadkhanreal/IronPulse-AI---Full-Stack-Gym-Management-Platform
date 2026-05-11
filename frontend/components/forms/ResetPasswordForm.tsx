@@ -3,110 +3,117 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signupSchema } from '@/lib/schemas';
-import { SignupFormData } from '@/types';
-import { useAuthStore } from '@/store/authStore';
-import { authService } from '@/lib/services/auth.service';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Loader2, Eye, EyeOff } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/api';
 
-export function SignupForm() {
+const resetPasswordSchema = z.object({
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ['confirmPassword'],
+});
+
+type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+
+interface ResetPasswordFormProps {
+  token: string;
+}
+
+export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { login } = useAuthStore();
+  const [resetSuccess, setResetSuccess] = useState(false);
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
+  } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
   });
 
-  const onSubmit = async (data: SignupFormData) => {
+  const onSubmit = async (data: ResetPasswordFormData) => {
     setIsSubmitting(true);
     try {
-      // Call backend API - only send name, email, password (not confirmPassword or acceptTerms)
-      const response = await authService.signup({
-        name: data.name,
-        email: data.email,
+      const response = await api.post('/auth/reset-password', {
+        token,
         password: data.password,
       });
 
       if (response.success) {
-        // Save token and user to store + localStorage
-        const user = {
-          ...response.data.user,
-          role: response.data.user.role as 'MEMBER' | 'ADMIN',
-          updatedAt: response.data.user.createdAt,
-        };
-        login(response.data.token, user);
+        setResetSuccess(true);
+        toast.success('Password reset successful!');
 
-        toast.success('Account created successfully! Welcome to IronPulse Gym.');
-
-        // Redirect to dashboard
-        router.push('/dashboard');
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+          router.push('/login');
+        }, 3000);
       }
     } catch (error: any) {
-      // Error handling - backend returns { success: false, message: string, error?: string }
-      const errorMessage = error?.message || 'Failed to create account. Please try again.';
+      const errorMessage = error?.message || 'Failed to reset password. The link may have expired.';
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (resetSuccess) {
+    return (
+      <Card className="w-full max-w-md bg-white/98 dark:bg-gray-100/98 backdrop-blur-xl border-2 border-green-500/40 shadow-2xl shadow-black/20">
+        <CardHeader className="border-b border-green-500/20">
+          <div className="flex items-center justify-center mb-4">
+            <div className="rounded-full bg-green-100 p-3">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+          </div>
+          <CardTitle className="text-2xl text-gray-900 text-center">Password Reset Successful!</CardTitle>
+          <CardDescription className="text-gray-600 text-center">
+            Your password has been updated successfully
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="space-y-4 text-center">
+            <p className="text-sm text-gray-600">
+              You can now login with your new password.
+            </p>
+            <p className="text-sm text-gray-600">
+              Redirecting to login page in 3 seconds...
+            </p>
+            <Button
+              onClick={() => router.push('/login')}
+              className="w-full gym-gradient"
+              size="lg"
+            >
+              Go to Login
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="w-full max-w-md bg-white/98 dark:bg-gray-100/98 backdrop-blur-xl border-2 border-red-500/40 shadow-2xl shadow-black/20">
       <CardHeader className="border-b border-red-500/20">
-        <CardTitle className="text-2xl text-gray-900">Create Your Account</CardTitle>
+        <CardTitle className="text-2xl text-gray-900">Set New Password</CardTitle>
         <CardDescription className="text-gray-600">
-          Join IronPulse Gym and start your fitness journey
+          Enter your new password below
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-gray-900">Full Name</Label>
-            <Input
-              id="name"
-              placeholder="John Doe"
-              autoComplete="name"
-              {...register('name')}
-              disabled={isSubmitting}
-              className="bg-gray-50 text-gray-900 border-gray-300 placeholder:text-gray-500 focus:border-red-500 focus:ring-red-500"
-            />
-            {errors.name && (
-              <p className="text-sm text-red-600">{errors.name.message}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-900">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="your.email@example.com"
-              autoComplete="email"
-              {...register('email')}
-              disabled={isSubmitting}
-              className="bg-gray-50 text-gray-900 border-gray-300 placeholder:text-gray-500 focus:border-red-500 focus:ring-red-500"
-            />
-            {errors.email && (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-900">Password</Label>
+            <Label htmlFor="password" className="text-gray-900">New Password</Label>
             <div className="relative">
               <Input
                 id="password"
@@ -134,10 +141,11 @@ export function SignupForm() {
             {errors.password && (
               <p className="text-sm text-red-600">{errors.password.message}</p>
             )}
+            <p className="text-xs text-gray-500">Password must be at least 6 characters</p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-gray-900">Confirm Password</Label>
+            <Label htmlFor="confirmPassword" className="text-gray-900">Confirm New Password</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
@@ -167,22 +175,6 @@ export function SignupForm() {
             )}
           </div>
 
-          <div className="flex items-start space-x-2">
-            <input
-              type="checkbox"
-              id="acceptTerms"
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-red-500 focus:ring-red-500"
-              {...register('acceptTerms')}
-              disabled={isSubmitting}
-            />
-            <Label htmlFor="acceptTerms" className="text-sm font-normal cursor-pointer text-gray-700">
-              I agree to the terms and conditions
-            </Label>
-          </div>
-          {errors.acceptTerms && (
-            <p className="text-sm text-red-600">{errors.acceptTerms.message}</p>
-          )}
-
           <Button
             type="submit"
             className="w-full gym-gradient"
@@ -192,19 +184,12 @@ export function SignupForm() {
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating account...
+                Resetting password...
               </>
             ) : (
-              'Sign Up'
+              'Reset Password'
             )}
           </Button>
-
-          <div className="text-center text-sm">
-            <span className="text-gray-600">Already have an account? </span>
-            <Link href="/login" className="text-red-600 hover:text-red-700 hover:underline font-semibold">
-              Login
-            </Link>
-          </div>
         </form>
       </CardContent>
     </Card>
