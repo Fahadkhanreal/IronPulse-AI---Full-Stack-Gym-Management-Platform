@@ -36,7 +36,7 @@ export function ForgotPasswordForm() {
     try {
       const response = await api.post('/auth/forgot-password', data);
 
-      if (response.data.success) {
+      if (response && (response as any).success) {
         setEmailSent(true);
         toast.success('Password reset link sent! Check your email.');
       }

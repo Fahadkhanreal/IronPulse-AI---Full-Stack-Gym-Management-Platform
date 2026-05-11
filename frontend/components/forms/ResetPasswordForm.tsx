@@ -50,7 +50,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         password: data.password,
       });
 
-      if (response.success) {
+      if (response && (response as any).success) {
         setResetSuccess(true);
         toast.success('Password reset successful!');
 
