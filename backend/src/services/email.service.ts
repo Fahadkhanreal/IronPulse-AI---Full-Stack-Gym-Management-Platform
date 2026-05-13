@@ -18,10 +18,11 @@ console.log('📧 Email Config:', {
 });
 
 // Create transporter with optimized timeout for serverless (Render)
+// Using port 465 with SSL for better compatibility with serverless environments
 const transporter = nodemailer.createTransport({
   host: smtpHost,
-  port: smtpPort,
-  secure: false,
+  port: smtpPort === 587 ? 465 : smtpPort,  // Use port 465 (SSL) instead of 587 (TLS)
+  secure: smtpPort === 587 ? true : false,  // Enable SSL for port 465
   auth: {
     user: smtpUser,
     pass: smtpPass,
@@ -32,6 +33,9 @@ const transporter = nodemailer.createTransport({
   pool: true,  // Use connection pooling for better performance
   maxConnections: 5,  // Max 5 concurrent connections
   maxMessages: 100,  // Reuse connection for 100 messages
+  tls: {
+    rejectUnauthorized: false  // Allow self-signed certificates (for serverless)
+  }
 });
 
 interface SendEmailOptions {
