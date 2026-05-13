@@ -60,7 +60,24 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         }, 3000);
       }
     } catch (error: any) {
-      const errorMessage = error?.message || 'Failed to reset password. The link may have expired.';
+      console.error('Reset password error:', error);
+
+      // Extract error message from different possible structures
+      let errorMessage = 'Failed to reset password. Please try again.';
+
+      if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.data?.message) {
+        errorMessage = error.data.message;
+      }
+
+      // Show user-friendly message for common errors
+      if (errorMessage.includes('expired') || errorMessage.includes('Invalid')) {
+        errorMessage = 'Reset link has expired. Please request a new password reset email.';
+      }
+
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
