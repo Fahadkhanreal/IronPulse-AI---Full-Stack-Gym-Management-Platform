@@ -74,7 +74,7 @@ export function BookingModal({ isOpen, onClose, selectedPlan }: BookingModalProp
           <div className="p-4 border rounded-lg bg-muted/30">
             <h3 className="font-semibold text-lg mb-2">{selectedPlan.title}</h3>
             <p className="text-2xl font-bold text-primary mb-1">
-              ${selectedPlan.price}
+              PKR {selectedPlan.price}
               <span className="text-sm text-muted-foreground">/month</span>
             </p>
             <p className="text-sm text-muted-foreground">
