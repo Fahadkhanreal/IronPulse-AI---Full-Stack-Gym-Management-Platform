@@ -17,20 +17,26 @@ api.interceptors.request.use(
       const publicEndpoints = [
         '/plans',
         '/trainers',
-        '/testimonials',
         '/auth/login',
         '/auth/signup',
         '/auth/forgot-password',
         '/auth/reset-password',
       ];
 
-      // Check if the request URL matches any public endpoint
-      const isPublicEndpoint = publicEndpoints.some(endpoint =>
-        config.url?.startsWith(endpoint)
-      );
+      // Check if the request URL matches any public endpoint (exact match or with query params)
+      const isPublicEndpoint = publicEndpoints.some(endpoint => {
+        const url = config.url || '';
+        // Exact match or starts with endpoint followed by ? (query params)
+        return url === endpoint || url.startsWith(endpoint + '?');
+      });
+
+      // Special case: /testimonials (public) but NOT /testimonials/my/* or /testimonials/admin/*
+      const isPublicTestimonials =
+        config.url === '/testimonials' ||
+        config.url?.startsWith('/testimonials?');
 
       // Only attach token for non-public endpoints
-      if (!isPublicEndpoint) {
+      if (!isPublicEndpoint && !isPublicTestimonials) {
         const token = localStorage.getItem('token');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
