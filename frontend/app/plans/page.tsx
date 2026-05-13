@@ -21,7 +21,7 @@ export default function PlansPage() {
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const hasActiveSubscription = activeSubscription && new Date(activeSubscription.endDate) > new Date();
+  const hasActiveSubscription = !!(activeSubscription && new Date(activeSubscription.endDate) > new Date());
 
   const handleSelectPlan = (plan: Plan) => {
     if (!isAuthenticated) {
