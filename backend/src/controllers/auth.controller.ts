@@ -135,10 +135,10 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
     // Send email with timeout
     console.log('📧 Sending password reset email to:', email);
 
-    // Wrap email in timeout
+    // Wrap email in timeout - 25 seconds for serverless
     const emailPromise = sendPasswordResetEmail(email, resetUrl);
     const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Email timeout')), 10000)
+      setTimeout(() => reject(new Error('Email timeout')), 25000)
     );
 
     let emailResult: { success: boolean; error?: string } = { success: false, error: 'timeout' };
@@ -151,14 +151,13 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
 
     if (emailResult.success) {
       console.log('✅ Password reset email sent successfully');
+    } else {
+      console.log('📧 Email failed - will return reset URL in response for fallback');
     }
 
-    // Return reset URL in development mode for testing
-    const showLinkInResponse = process.env.NODE_ENV === 'development' || !emailResult.success;
-
-    // Always return same message (security)
+    // Always return reset URL for fallback (security: same message shown)
     res.status(200).json(success('If the email exists, a reset link has been sent', {
-      ...(showLinkInResponse && { resetUrl }),
+      resetUrl,
     }));
   } catch (err) {
     next(err);
