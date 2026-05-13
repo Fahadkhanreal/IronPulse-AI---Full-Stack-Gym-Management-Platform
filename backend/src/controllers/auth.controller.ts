@@ -141,11 +141,12 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
       setTimeout(() => reject(new Error('Email timeout')), 10000)
     );
 
-    let emailResult = { success: false, error: 'timeout' };
+    let emailResult: { success: boolean; error?: string } = { success: false, error: 'timeout' };
     try {
-      emailResult = await Promise.race([emailPromise, timeoutPromise]);
+      emailResult = await Promise.race([emailPromise, timeoutPromise]) as { success: boolean; error?: string };
     } catch (emailError: any) {
       console.error('❌ Email sending failed:', emailError.message);
+      emailResult = { success: false, error: emailError.message };
     }
 
     if (emailResult.success) {
