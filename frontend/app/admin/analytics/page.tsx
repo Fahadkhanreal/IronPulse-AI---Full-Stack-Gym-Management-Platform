@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, MessageSquare, Users, TrendingUp, Clock } from 'lucide-react';
+import { Loader2, MessageSquare, Users, TrendingUp, Clock, DollarSign, TrendingDown } from 'lucide-react';
 import api from '@/lib/api';
 import { Line, Bar } from 'react-chartjs-2';
 import {
@@ -15,6 +15,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js';
 
 ChartJS.register(
@@ -25,11 +26,12 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 export default function ChatAnalyticsPage() {
-  const { data: analytics, isLoading } = useQuery({
+  const { data: analytics, isLoading: chatLoading } = useQuery({
     queryKey: ['chat-analytics'],
     queryFn: async () => {
       const response = await api.get('/admin/analytics/chat');
@@ -45,6 +47,16 @@ export default function ChatAnalyticsPage() {
     },
   });
 
+  const { data: revenueData, isLoading: revenueLoading, error: revenueError } = useQuery({
+    queryKey: ['revenue-analytics'],
+    queryFn: async () => {
+      const response = await api.get('/admin/analytics/revenue');
+      return response.data;
+    },
+  });
+
+  const isLoading = chatLoading || revenueLoading;
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -53,10 +65,18 @@ export default function ChatAnalyticsPage() {
     );
   }
 
+  if (revenueError) {
+    console.error('Revenue API Error:', revenueError);
+  }
+
   const overview = analytics?.overview || {};
   const conversationsByDay = analytics?.conversationsByDay || [];
   const knowledgeBase = analytics?.knowledgeBase || [];
   const activeUsers = analytics?.activeUsers || [];
+
+  // Revenue data
+  const revenueOverview = revenueData?.overview || {};
+  const monthlyRevenue = revenueData?.monthlyRevenue || [];
 
   // Chart data for conversations over time
   const conversationsChartData = {
@@ -91,12 +111,122 @@ export default function ChatAnalyticsPage() {
     ],
   };
 
+  // Chart data for monthly revenue
+  const revenueChartData = {
+    labels: monthlyRevenue.map((m: any) => m.monthLabel),
+    datasets: [
+      {
+        label: 'Revenue',
+        data: monthlyRevenue.map((m: any) => m.revenue),
+        borderColor: 'rgb(34, 197, 94)',
+        backgroundColor: 'rgba(34, 197, 94, 0.2)',
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Chat Analytics</h1>
-        <p className="text-muted-foreground">Monitor chatbot performance and usage</p>
+        <h1 className="text-3xl font-bold mb-2">Analytics Dashboard</h1>
+        <p className="text-muted-foreground">Monitor gym performance and revenue</p>
       </div>
+
+      {/* Revenue Overview Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <Card className="border-l-4 border-l-green-500">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-green-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">PKR {revenueOverview.totalRevenue?.toLocaleString() || 0}</div>
+            <p className="text-xs text-muted-foreground">All time</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-blue-500">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Payments</CardTitle>
+            <TrendingUp className="h-4 w-4 text-blue-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{revenueOverview.totalPayments || 0}</div>
+            <p className="text-xs text-muted-foreground">Successful transactions</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-purple-500">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Avg Revenue/Payment</CardTitle>
+            <DollarSign className="h-4 w-4 text-purple-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">PKR {Math.round(revenueOverview.avgRevenuePerPayment || 0).toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">Per transaction</p>
+          </CardContent>
+        </Card>
+
+        <Card className={`border-l-4 ${(revenueOverview.lastMonthGrowth || 0) >= 0 ? 'border-l-green-500' : 'border-l-red-500'}`}>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Growth Rate</CardTitle>
+            {(revenueOverview.lastMonthGrowth || 0) >= 0 ? (
+              <TrendingUp className="h-4 w-4 text-green-600" />
+            ) : (
+              <TrendingDown className="h-4 w-4 text-red-600" />
+            )}
+          </CardHeader>
+          <CardContent>
+            <div className={`text-2xl font-bold ${(revenueOverview.lastMonthGrowth || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {(revenueOverview.lastMonthGrowth || 0) >= 0 ? '+' : ''}{revenueOverview.lastMonthGrowth || 0}%
+            </div>
+            <p className="text-xs text-muted-foreground">Last month vs previous</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Revenue Chart - Always show even if no data */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Monthly Revenue</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {monthlyRevenue.length > 0 ? (
+            <Line
+              data={revenueChartData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: (context) => `Revenue: PKR ${Number(context.raw).toLocaleString()}`,
+                    },
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: (value) => `PKR ${Number(value).toLocaleString()}`,
+                    },
+                  },
+                },
+              }}
+            />
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <DollarSign className="h-12 w-12 mx-auto mb-2 opacity-50" />
+              <p>No revenue data available yet</p>
+              <p className="text-sm">Revenue will appear after the first payment</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Overview Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

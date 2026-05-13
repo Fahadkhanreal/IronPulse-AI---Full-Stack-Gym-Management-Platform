@@ -3,7 +3,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
-export default function ResetPasswordPage({ params }: { params: { token: string } }) {
+export default async function ResetPasswordPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params;
+
   return (
     <div className="min-h-screen relative flex items-center justify-center">
       {/* Background Image */}
@@ -32,7 +34,7 @@ export default function ResetPasswordPage({ params }: { params: { token: string 
           <h1 className="text-4xl font-bold text-white mb-2">Reset Password</h1>
           <p className="text-white/80">Enter your new password below</p>
         </div>
-        <ResetPasswordForm token={params.token} />
+        <ResetPasswordForm token={token} />
       </div>
     </div>
   );

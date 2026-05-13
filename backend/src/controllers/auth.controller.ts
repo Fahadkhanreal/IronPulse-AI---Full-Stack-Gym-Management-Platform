@@ -5,6 +5,7 @@ import { sign } from '../utils/jwt';
 import { success, error } from '../utils/response';
 import { SignupInput, LoginInput } from '../schemas/auth.schema';
 import crypto from 'crypto';
+import { sendPasswordResetEmail } from '../services/email.service';
 
 export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -128,18 +129,24 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
       },
     });
 
-    // TODO: Send email with reset link
-    // For now, we'll just log it (in production, use nodemailer or similar)
+    // Generate reset URL
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    console.log('🔐 Password Reset Link:', resetUrl);
-    console.log('📧 Send this link to:', email);
 
-    // In production, send email here:
-    // await sendPasswordResetEmail(email, resetUrl);
+    // Send email with reset link
+    console.log('📧 Sending password reset email to:', email);
+    const emailResult = await sendPasswordResetEmail(email, resetUrl);
 
+    if (!emailResult.success) {
+      console.error('Failed to send email:', emailResult.error);
+      // Still return success to prevent email enumeration
+    } else {
+      console.log('✅ Password reset email sent successfully');
+    }
+
+    // Always return same message (security)
     res.status(200).json(success('If the email exists, a reset link has been sent', {
-      // Only include in development
-      ...(process.env.NODE_ENV === 'development' && { resetUrl }),
+      // Only include in development (for testing without SMTP)
+      ...(process.env.NODE_ENV === 'development' && !process.env.BREVO_SMTP_PASS && { resetUrl }),
     }));
   } catch (err) {
     next(err);

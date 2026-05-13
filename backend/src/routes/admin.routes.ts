@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticate } from '../middleware/auth.middleware';
 import { requireAdmin } from '../middleware/admin.middleware';
 import { adminRateLimit } from '../middleware/rateLimit.middleware';
-import { getDashboardStats, getAdminBookings, getAdminPayments } from '../controllers/admin.controller';
+import { getDashboardStats, getAdminBookings, getAdminPayments, getAdminUsers } from '../controllers/admin.controller';
 
 const router = Router();
 
@@ -19,5 +19,8 @@ router.get('/bookings', getAdminBookings);
 
 // Admin payments management
 router.get('/payments', getAdminPayments);
+
+// Admin users/members management
+router.get('/users', getAdminUsers);
 
 export default router;

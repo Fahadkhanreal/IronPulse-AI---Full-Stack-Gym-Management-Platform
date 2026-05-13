@@ -10,7 +10,10 @@ interface RateLimitEntry {
 // Key format: "userId:{id}" or "ip:{ip}"
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
-// Cleanup old entries every 5 minutes
+// Clear rate limit store on module load
+rateLimitStore.clear();
+
+// Cleanup old entries every 1 minute
 setInterval(() => {
   const now = Date.now();
   for (const [key, entry] of rateLimitStore.entries()) {
@@ -18,7 +21,7 @@ setInterval(() => {
       rateLimitStore.delete(key);
     }
   }
-}, 5 * 60 * 1000);
+}, 60 * 1000);
 
 export interface RateLimitOptions {
   windowMs?: number; // Time window in milliseconds

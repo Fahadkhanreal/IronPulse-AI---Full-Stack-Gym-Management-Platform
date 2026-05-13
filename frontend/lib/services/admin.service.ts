@@ -7,6 +7,20 @@ interface ApiResponse<T> {
   data: T;
 }
 
+export interface AdminMember {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+  hasActiveSubscription: boolean;
+  activePlan: {
+    id: string;
+    title: string;
+    price: number;
+  } | null;
+  totalSpent: number;
+}
+
 export const adminService = {
   /**
    * Get dashboard statistics
@@ -43,6 +57,20 @@ export const adminService = {
     if (params?.pageSize) queryParams.append('pageSize', params.pageSize.toString());
 
     const url = `/admin/payments${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    return await api.get(url);
+  },
+
+  /**
+   * Get all members with filters
+   */
+  async getMembers(params?: FilterParams): Promise<ApiResponse<PaginatedResponse<AdminMember>>> {
+    const queryParams = new URLSearchParams();
+    if (params?.search) queryParams.append('search', params.search);
+    if (params?.hasSubscription) queryParams.append('hasSubscription', params.hasSubscription);
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.pageSize) queryParams.append('pageSize', params.pageSize.toString());
+
+    const url = `/admin/users${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     return await api.get(url);
   },
 };

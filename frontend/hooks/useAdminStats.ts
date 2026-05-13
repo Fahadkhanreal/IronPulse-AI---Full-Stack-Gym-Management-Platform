@@ -34,3 +34,14 @@ export function useAdminPayments(params?: FilterParams) {
     staleTime: 30 * 1000, // 30 seconds
   });
 }
+
+export function useAdminMembers(params?: FilterParams) {
+  return useQuery({
+    queryKey: ['admin', 'members', params],
+    queryFn: async () => {
+      const response = await adminService.getMembers(params);
+      return response.data;
+    },
+    staleTime: 30 * 1000, // 30 seconds
+  });
+}

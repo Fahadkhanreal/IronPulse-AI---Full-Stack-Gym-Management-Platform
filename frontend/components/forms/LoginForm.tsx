@@ -70,7 +70,7 @@ export function LoginForm() {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-900">Email</Label>
+            <Label htmlFor="email" className="text-gray-900 dark:text-gray-900">Email</Label>
             <Input
               id="email"
               type="email"
@@ -87,7 +87,7 @@ export function LoginForm() {
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-gray-900">Password</Label>
+              <Label htmlFor="password" className="text-gray-900 dark:text-gray-900">Password</Label>
               <Link
                 href="/forgot-password"
                 className="text-sm text-red-600 hover:text-red-700 hover:underline"

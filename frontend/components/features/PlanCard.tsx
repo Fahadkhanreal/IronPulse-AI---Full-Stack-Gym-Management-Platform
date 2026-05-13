@@ -8,13 +8,14 @@ import { useAuthStore } from '@/store/authStore';
 interface PlanCardProps {
   plan: Plan;
   onSelectPlan?: (plan: Plan) => void;
+  isActive?: boolean;
 }
 
-export function PlanCard({ plan, onSelectPlan }: PlanCardProps) {
+export function PlanCard({ plan, onSelectPlan, isActive = false }: PlanCardProps) {
   const { isAuthenticated } = useAuthStore();
 
   return (
-    <Card className="flex flex-col h-full hover:border-primary transition-all duration-300 relative overflow-hidden group hover:scale-105 hover:shadow-xl">
+    <Card className={`flex flex-col h-full hover:border-primary transition-all duration-300 relative overflow-hidden group hover:scale-105 hover:shadow-xl ${isActive ? 'opacity-60' : ''}`}>
       {/* Animated gradient background on hover */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 pointer-events-none"
@@ -67,7 +68,13 @@ export function PlanCard({ plan, onSelectPlan }: PlanCardProps) {
           <PaymentButton
             planId={plan.id}
             planTitle={plan.title}
+            disabled={isActive}
           />
+          {isActive && (
+            <p className="text-center text-sm text-muted-foreground mt-2">
+              You have an active subscription
+            </p>
+          )}
         </div>
       </CardFooter>
     </Card>

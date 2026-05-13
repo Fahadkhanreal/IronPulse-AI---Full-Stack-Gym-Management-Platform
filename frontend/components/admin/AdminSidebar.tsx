@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Package, Calendar, CreditCard, LogOut, Menu, X, Users, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Package, Calendar, CreditCard, LogOut, Menu, X, Users, MessageSquare, BarChart3 } from 'lucide-react';
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -15,11 +15,13 @@ export function AdminSidebar() {
   const navItems = [
     { href: '/admin/dashboard', label: 'Admin Dashboard', icon: LayoutDashboard },
     { href: '/dashboard', label: 'Member Dashboard', icon: LayoutDashboard },
+    { href: '/admin/members', label: 'Members', icon: Users },
     { href: '/admin/plans', label: 'Plans', icon: Package },
     { href: '/admin/bookings', label: 'Bookings', icon: Calendar },
     { href: '/admin/payments', label: 'Payments', icon: CreditCard },
     { href: '/admin/trainers', label: 'Trainers', icon: Users },
     { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquare },
+    { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
   return (

@@ -71,14 +71,14 @@ app.use('/api/v1/plans', planRoutes);
 app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/payments', paymentRoutes);
-app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/admin/analytics', analyticsRoutes);  // Must be BEFORE admin routes (no rate limit)
+app.use('/api/v1/admin/knowledge', knowledgeRoutes);
+app.use('/api/v1/admin', adminRoutes);  // adminRoutes has rate limit
 app.use('/api/v1/subscriptions', subscriptionRoutes);
 app.use('/api/v1/trainers', trainerRoutes);
 app.use('/api/v1/testimonials', testimonialRoutes);
 app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1', chatRoutes);
-app.use('/api/v1/admin/knowledge', knowledgeRoutes);
-app.use('/api/v1/admin/analytics', analyticsRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

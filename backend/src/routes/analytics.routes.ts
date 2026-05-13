@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import { getChatAnalytics, getPopularQuestions, getResponseTimes } from '../controllers/analytics.controller';
+import { getChatAnalytics, getPopularQuestions, getResponseTimes, getRevenueAnalytics } from '../controllers/analytics.controller';
 import { authenticate } from '../middleware/auth.middleware';
 import { requireAdmin } from '../middleware/admin.middleware';
 
 const router = Router();
+
+// NO RATE LIMIT for analytics - completely removed
 
 /**
  * All analytics routes require admin authentication
@@ -27,5 +29,11 @@ router.get('/popular-questions', getPopularQuestions);
  * Get average response times
  */
 router.get('/response-times', getResponseTimes);
+
+/**
+ * GET /api/v1/admin/analytics/revenue
+ * Get monthly revenue analytics
+ */
+router.get('/revenue', getRevenueAnalytics);
 
 export default router;

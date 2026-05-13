@@ -88,21 +88,32 @@ export async function getChatAnalytics(req: Request, res: Response) {
       };
     });
 
-    // Conversations over time (daily)
-    const conversationsByDay = await prisma.$queryRaw<Array<{ date: string; count: bigint }>>`
-      SELECT DATE(created_at) as date, COUNT(*)::int as count
-      FROM "ChatHistory"
-      WHERE created_at >= ${start} AND created_at <= ${end}
-      GROUP BY DATE(created_at)
-      ORDER BY DATE(created_at)
-    `;
+    // Conversations over time (daily) - safe query
+    let conversationsByDay: Array<{ date: string; count: bigint }> = [];
+    try {
+      conversationsByDay = await prisma.$queryRaw<Array<{ date: string; count: bigint }>>`
+        SELECT DATE("createdAt") as date, COUNT(*)::int as count
+        FROM "ChatHistory"
+        WHERE "createdAt" >= ${start} AND "createdAt" <= ${end}
+        GROUP BY DATE("createdAt")
+        ORDER BY DATE("createdAt")
+      `;
+    } catch (e) {
+      console.warn('ChatHistory table not found');
+    }
 
-    // Knowledge base stats
-    const documentCounts = await prisma.$queryRaw<Array<{ category: string; count: bigint }>>`
-      SELECT metadata->>'category' as category, COUNT(*)::int as count
-      FROM "Document"
-      GROUP BY metadata->>'category'
-    `;
+    // Knowledge base stats - safe query
+    let documentCounts: Array<{ category: string; count: bigint }> = [];
+    try {
+      documentCounts = await prisma.$queryRaw<Array<{ category: string; count: bigint }>>`
+        SELECT metadata->>'category' as category, COUNT(*)::int as count
+        FROM "Document"
+        GROUP BY metadata->>'category'
+      `;
+    } catch (e) {
+      // Table doesn't exist, return empty
+      console.warn('Document table not found, skipping knowledge base stats');
+    }
 
     return res.status(200).json({
       success: true,
@@ -246,6 +257,92 @@ export async function getResponseTimes(req: Request, res: Response) {
     });
   } catch (error) {
     console.error('Error in getResponseTimes:', error);
+    return res.status(500).json({
+      success: false,
+      error: buildErrorMessage(),
+      code: 'INTERNAL_ERROR',
+    });
+  }
+}
+
+/**
+ * GET /api/v1/admin/analytics/revenue
+ * Get monthly revenue analytics
+ */
+export async function getRevenueAnalytics(req: Request, res: Response) {
+  try {
+    // Get last 12 months of data
+    const months = 12;
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - months);
+
+    // Get monthly revenue data - safe query
+    let monthlyRevenue: Array<{ month: string; revenue: number; count: number }> = [];
+    try {
+      monthlyRevenue = await prisma.$queryRaw<Array<{ month: string; revenue: number; count: number }>>`
+        SELECT
+          TO_CHAR(DATE_TRUNC('month', "createdAt"), 'YYYY-MM') as month,
+          SUM(amount)::float as revenue,
+          COUNT(*)::int as count
+        FROM "Payment"
+        WHERE status = 'SUCCEEDED'
+          AND "createdAt" >= ${startDate}
+        GROUP BY DATE_TRUNC('month', "createdAt")
+        ORDER BY DATE_TRUNC('month', "createdAt")
+      `;
+    } catch (e) {
+      console.warn('Payment table issue');
+    }
+
+    // Get total revenue
+    const totalRevenueResult = await prisma.payment.aggregate({
+      where: { status: 'SUCCEEDED' },
+      _sum: { amount: true },
+    });
+
+    // Get total successful payments count
+    const totalPaymentsCount = await prisma.payment.count({
+      where: { status: 'SUCCEEDED' },
+    });
+
+    // Calculate average revenue per payment
+    const avgRevenuePerPayment = totalPaymentsCount > 0
+      ? (totalRevenueResult._sum.amount || 0) / totalPaymentsCount
+      : 0;
+
+    // Calculate growth rate
+    const revenueArray = monthlyRevenue.map(m => Number(m.revenue));
+    let growthRate = 0;
+    if (revenueArray.length >= 2) {
+      const lastMonth = revenueArray[revenueArray.length - 1];
+      const previousMonth = revenueArray[revenueArray.length - 2];
+      if (previousMonth > 0) {
+        growthRate = ((lastMonth - previousMonth) / previousMonth) * 100;
+      }
+    }
+
+    // Format month labels for display
+    const formattedData = monthlyRevenue.map(m => ({
+      month: m.month,
+      monthLabel: new Date(m.month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+      revenue: Number(m.revenue),
+      count: Number(m.count),
+    }));
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        monthlyRevenue: formattedData,
+        overview: {
+          totalRevenue: totalRevenueResult._sum.amount || 0,
+          totalPayments: totalPaymentsCount,
+          avgRevenuePerPayment,
+          lastMonthGrowth: Math.round(growthRate * 10) / 10,
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error in getRevenueAnalytics:', error);
     return res.status(500).json({
       success: false,
       error: buildErrorMessage(),

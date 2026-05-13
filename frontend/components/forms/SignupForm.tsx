@@ -75,7 +75,7 @@ export function SignupForm() {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-gray-900">Full Name</Label>
+            <Label htmlFor="name" className="text-gray-900 dark:text-gray-900">Full Name</Label>
             <Input
               id="name"
               placeholder="John Doe"
@@ -90,7 +90,7 @@ export function SignupForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-900">Email</Label>
+            <Label htmlFor="email" className="text-gray-900 dark:text-gray-900">Email</Label>
             <Input
               id="email"
               type="email"
@@ -106,7 +106,7 @@ export function SignupForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-900">Password</Label>
+            <Label htmlFor="password" className="text-gray-900 dark:text-gray-900">Password</Label>
             <div className="relative">
               <Input
                 id="password"
@@ -137,7 +137,7 @@ export function SignupForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-gray-900">Confirm Password</Label>
+            <Label htmlFor="confirmPassword" className="text-gray-900 dark:text-gray-900">Confirm Password</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"

@@ -20,6 +20,11 @@ export function PaymentButton({ planId, planTitle, gateway, disabled }: PaymentB
   const createCheckout = useCreateCheckout();
 
   const handlePayment = async () => {
+    if (disabled) {
+      toast.error('You already have an active subscription');
+      return;
+    }
+
     if (!isAuthenticated) {
       toast.error('Please create an account to subscribe to a plan', {
         description: 'You need to sign up first to access our membership plans',
@@ -48,6 +53,8 @@ export function PaymentButton({ planId, planTitle, gateway, disabled }: PaymentB
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Processing...
         </>
+      ) : disabled ? (
+        'Active'
       ) : (
         'Subscribe Now'
       )}

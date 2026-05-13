@@ -5,6 +5,7 @@ import { PlanCard } from '@/components/features/PlanCard';
 import { BookingModal } from '@/components/features/BookingModal';
 import { usePlans } from '@/hooks/usePlans';
 import { useAuthStore } from '@/store/authStore';
+import { useActiveSubscription } from '@/hooks/useSubscriptions';
 import { Plan } from '@/types';
 import { PlanCardSkeleton } from '@/components/common/PlanCardSkeleton';
 import { useRouter } from 'next/navigation';
@@ -15,14 +16,22 @@ import Image from 'next/image';
 export default function PlansPage() {
   const { data: plans, isLoading } = usePlans();
   const { isAuthenticated } = useAuthStore();
+  const { data: activeSubscription, isLoading: subLoading } = useActiveSubscription();
   const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const hasActiveSubscription = activeSubscription && new Date(activeSubscription.endDate) > new Date();
 
   const handleSelectPlan = (plan: Plan) => {
     if (!isAuthenticated) {
       toast.error('Please login to book a session');
       router.push('/login');
+      return;
+    }
+
+    if (hasActiveSubscription) {
+      toast.error('You already have an active subscription. You can renew after it expires.');
       return;
     }
 
@@ -108,7 +117,11 @@ export default function PlansPage() {
                 },
               }}
             >
-              <PlanCard plan={plan} onSelectPlan={handleSelectPlan} />
+              <PlanCard
+                plan={plan}
+                onSelectPlan={handleSelectPlan}
+                isActive={hasActiveSubscription}
+              />
             </motion.div>
           ))}
         </motion.div>

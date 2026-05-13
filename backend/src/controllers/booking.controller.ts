@@ -20,6 +20,22 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
       return res.status(404).json(error('Plan not found', `No plan found with ID: ${planId}`));
     }
 
+    // Check if user already has an active subscription
+    const activeSubscription = await prisma.subscription.findFirst({
+      where: {
+        userId: req.user.userId,
+        status: 'ACTIVE',
+        endDate: { gte: new Date() },
+      },
+    });
+
+    if (activeSubscription) {
+      return res.status(400).json(error(
+        'Active subscription exists',
+        `You already have an active subscription (${activeSubscription.planId}). You can renew or upgrade after your current subscription ends on ${new Date(activeSubscription.endDate).toLocaleDateString()}.`
+      ));
+    }
+
     // Create booking
     const booking = await prisma.booking.create({
       data: {

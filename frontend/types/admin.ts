@@ -42,6 +42,7 @@ export interface FilterParams {
   search?: string;
   page?: number;
   pageSize?: number;
+  hasSubscription?: string;
 }
 
 export interface PaginatedResponse<T> {
