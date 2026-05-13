@@ -1,41 +1,15 @@
-import nodemailer from 'nodemailer';
+import axios from 'axios';
 import { success } from '../utils/response';
 
-// Email configuration from environment
-const smtpHost = process.env.BREVO_SMTP_HOST || 'smtp-relay.brevo.com';
-const smtpPort = parseInt(process.env.BREVO_SMTP_PORT || '587');
-const smtpUser = process.env.BREVO_SMTP_USER || '';
-const smtpPass = process.env.BREVO_SMTP_PASS || '';
+// Brevo API configuration (HTTP-based, works in serverless)
+const brevoApiKey = process.env.BREVO_API_KEY || '';
 const fromEmail = process.env.BREVO_FROM_EMAIL || 'noreply@ironpulse.gym';
 const fromName = process.env.BREVO_FROM_NAME || 'IronPulse Gym';
 
-console.log('📧 Email Config:', {
-  host: smtpHost,
-  port: smtpPort,
-  user: smtpUser ? 'set' : 'not set',
-  pass: smtpPass ? 'set' : 'not set',
-  fromEmail
-});
-
-// Create transporter with optimized timeout for serverless (Render)
-// Using port 465 with SSL for better compatibility with serverless environments
-const transporter = nodemailer.createTransport({
-  host: smtpHost,
-  port: smtpPort === 587 ? 465 : smtpPort,  // Use port 465 (SSL) instead of 587 (TLS)
-  secure: smtpPort === 587 ? true : false,  // Enable SSL for port 465
-  auth: {
-    user: smtpUser,
-    pass: smtpPass,
-  },
-  connectionTimeout: 15000,  // 15 seconds - faster connection
-  socketTimeout: 20000,  // 20 seconds - aligned with backend timeout
-  greetingTimeout: 10000,  // 10 seconds - faster greeting
-  pool: true,  // Use connection pooling for better performance
-  maxConnections: 5,  // Max 5 concurrent connections
-  maxMessages: 100,  // Reuse connection for 100 messages
-  tls: {
-    rejectUnauthorized: false  // Allow self-signed certificates (for serverless)
-  }
+console.log('📧 Email Config (Brevo API):', {
+  apiKey: brevoApiKey ? 'set (length: ' + brevoApiKey.length + ')' : 'not set',
+  fromEmail,
+  fromName
 });
 
 interface SendEmailOptions {
@@ -46,45 +20,67 @@ interface SendEmailOptions {
 
 export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
   try {
-    // If no SMTP password configured, just log and return (for testing)
-    if (!smtpPass) {
-      console.log('📧 Email (SMTP not configured):', { to, subject });
+    // If no API key configured, just log and return (for testing)
+    if (!brevoApiKey) {
+      console.log('📧 Email (Brevo API not configured):', { to, subject });
       console.log('📧 HTML:', html);
-      return { success: true, message: 'Email logged (SMTP not configured)' };
+      return { success: true, message: 'Email logged (Brevo API not configured)' };
     }
 
-    console.log('📧 Attempting to send email...');
+    console.log('📧 Attempting to send email via Brevo API...');
     console.log('📧 To:', to);
     console.log('📧 From:', `"${fromName}" <${fromEmail}>`);
     console.log('📧 Subject:', subject);
 
-    const info = await transporter.sendMail({
-      from: `"${fromName}" <${fromEmail}>`,
-      to,
-      subject,
-      html,
-    });
+    // Send email using Brevo API (v3)
+    const response = await axios.post(
+      'https://api.brevo.com/v3/smtp/email',
+      {
+        sender: {
+          name: fromName,
+          email: fromEmail
+        },
+        to: [
+          {
+            email: to
+          }
+        ],
+        subject: subject,
+        htmlContent: html
+      },
+      {
+        headers: {
+          'accept': 'application/json',
+          'api-key': brevoApiKey,
+          'content-type': 'application/json'
+        },
+        timeout: 15000  // 15 second timeout
+      }
+    );
 
-    console.log('✅ Email sent successfully!');
-    console.log('📧 Message ID:', info.messageId);
-    console.log('📧 Response:', info.response);
-    return { success: true, messageId: info.messageId };
+    console.log('✅ Email sent successfully via Brevo API!');
+    console.log('📧 Message ID:', response.data.messageId);
+    console.log('📧 Response Status:', response.status);
+    return { success: true, messageId: response.data.messageId };
   } catch (error: any) {
-    console.error('❌ Email sending failed!');
+    console.error('❌ Email sending failed (Brevo API)!');
     console.error('❌ Error Message:', error.message);
-    console.error('❌ Error Code:', error.code);
-    console.error('❌ Error Response:', error.response);
-    console.error('❌ Full Error:', JSON.stringify(error, null, 2));
+    console.error('❌ Error Response:', error.response?.data);
+    console.error('❌ Status Code:', error.response?.status);
 
     // Log configuration for debugging
     console.error('📧 Email Configuration:');
-    console.error('  - Host:', smtpHost);
-    console.error('  - Port:', smtpPort);
-    console.error('  - User:', smtpUser);
+    console.error('  - API Endpoint: https://api.brevo.com/v3/smtp/email');
+    console.error('  - API Key:', brevoApiKey ? 'SET (length: ' + brevoApiKey.length + ')' : 'NOT SET');
     console.error('  - From Email:', fromEmail);
     console.error('  - To Email:', to);
 
-    return { success: false, error: error.message, code: error.code, response: error.response };
+    return {
+      success: false,
+      error: error.message,
+      code: error.response?.status,
+      response: error.response?.data
+    };
   }
 };
 
