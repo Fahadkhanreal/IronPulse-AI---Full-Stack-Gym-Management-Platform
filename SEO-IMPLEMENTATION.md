@@ -8,7 +8,7 @@ This document outlines the comprehensive SEO implementation for the IronPulse Gy
 ### 1. Meta Tags & Metadata
 - **Root Layout** (`app/layout.tsx`): Enhanced with comprehensive metadata including:
   - Dynamic title templates
-  - Rich descriptions with keywords
+  - Rich descriptions with m keywords
   - Open Graph tags for social sharing
   - Twitter Card metadata
   - Robots directives
