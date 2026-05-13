@@ -135,10 +135,10 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
     // Send email with timeout
     console.log('📧 Sending password reset email to:', email);
 
-    // Wrap email in timeout - 25 seconds for serverless
+    // Wrap email in timeout - 20 seconds for serverless (frontend has 30s timeout)
     const emailPromise = sendPasswordResetEmail(email, resetUrl);
     const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Email timeout')), 25000)
+      setTimeout(() => reject(new Error('Email timeout')), 20000)
     );
 
     let emailResult: { success: boolean; error?: string } = { success: false, error: 'timeout' };

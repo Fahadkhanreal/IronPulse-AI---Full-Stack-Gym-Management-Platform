@@ -3,19 +3,38 @@ import { toast } from 'sonner';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000/api/v1',
-  timeout: 20000, // Increased to 20s to handle Neon database cold starts
+  timeout: 30000, // Increased to 30s for serverless cold starts + email sending
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor: Attach JWT token
+// Request interceptor: Attach JWT token (except for public endpoints)
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      // Public endpoints that don't need authentication
+      const publicEndpoints = [
+        '/plans',
+        '/trainers',
+        '/testimonials',
+        '/auth/login',
+        '/auth/signup',
+        '/auth/forgot-password',
+        '/auth/reset-password',
+      ];
+
+      // Check if the request URL matches any public endpoint
+      const isPublicEndpoint = publicEndpoints.some(endpoint =>
+        config.url?.startsWith(endpoint)
+      );
+
+      // Only attach token for non-public endpoints
+      if (!isPublicEndpoint) {
+        const token = localStorage.getItem('token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
       }
     }
     return config;
@@ -32,14 +51,20 @@ api.interceptors.response.use(
     if (typeof window !== 'undefined') {
       // Handle 401 Unauthorized - token expired or invalid
       if (error.response?.status === 401) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        toast.error('Session expired. Please login again.');
+        // Only clear auth and redirect if this was an authenticated request
+        // (i.e., if we actually sent a token)
+        const hadToken = error.config?.headers?.Authorization;
 
-        // Redirect to login after a short delay
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 1000);
+        if (hadToken) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          toast.error('Session expired. Please login again.');
+
+          // Redirect to login after a short delay
+          setTimeout(() => {
+            window.location.href = '/login';
+          }, 1000);
+        }
       }
 
       // Handle other errors with toast

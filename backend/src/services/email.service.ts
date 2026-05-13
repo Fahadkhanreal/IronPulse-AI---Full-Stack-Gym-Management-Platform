@@ -17,7 +17,7 @@ console.log('📧 Email Config:', {
   fromEmail
 });
 
-// Create transporter with longer timeout for serverless
+// Create transporter with optimized timeout for serverless (Render)
 const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: smtpPort,
@@ -26,9 +26,12 @@ const transporter = nodemailer.createTransport({
     user: smtpUser,
     pass: smtpPass,
   },
-  connectionTimeout: 30000,  // 30 seconds
-  socketTimeout: 45000,  // 45 seconds
-  greetingTimeout: 30000,  // 30 seconds
+  connectionTimeout: 15000,  // 15 seconds - faster connection
+  socketTimeout: 20000,  // 20 seconds - aligned with backend timeout
+  greetingTimeout: 10000,  // 10 seconds - faster greeting
+  pool: true,  // Use connection pooling for better performance
+  maxConnections: 5,  // Max 5 concurrent connections
+  maxMessages: 100,  // Reuse connection for 100 messages
 });
 
 interface SendEmailOptions {
