@@ -132,21 +132,32 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
     // Generate reset URL
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-    // Send email with reset link
+    // Send email with timeout
     console.log('📧 Sending password reset email to:', email);
-    const emailResult = await sendPasswordResetEmail(email, resetUrl);
 
-    if (!emailResult.success) {
-      console.error('Failed to send email:', emailResult.error);
-      // Still return success to prevent email enumeration
-    } else {
+    // Wrap email in timeout
+    const emailPromise = sendPasswordResetEmail(email, resetUrl);
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Email timeout')), 10000)
+    );
+
+    let emailResult = { success: false, error: 'timeout' };
+    try {
+      emailResult = await Promise.race([emailPromise, timeoutPromise]);
+    } catch (emailError: any) {
+      console.error('❌ Email sending failed:', emailError.message);
+    }
+
+    if (emailResult.success) {
       console.log('✅ Password reset email sent successfully');
     }
 
+    // Return reset URL in development mode for testing
+    const showLinkInResponse = process.env.NODE_ENV === 'development' || !emailResult.success;
+
     // Always return same message (security)
     res.status(200).json(success('If the email exists, a reset link has been sent', {
-      // Only include in development (for testing without SMTP)
-      ...(process.env.NODE_ENV === 'development' && !process.env.BREVO_SMTP_PASS && { resetUrl }),
+      ...(showLinkInResponse && { resetUrl }),
     }));
   } catch (err) {
     next(err);
