@@ -141,9 +141,9 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
       setTimeout(() => reject(new Error('Email timeout')), 20000)
     );
 
-    let emailResult: { success: boolean; error?: string } = { success: false, error: 'timeout' };
+    let emailResult: { success: boolean; error?: string; code?: string; response?: string } = { success: false, error: 'timeout' };
     try {
-      emailResult = await Promise.race([emailPromise, timeoutPromise]) as { success: boolean; error?: string };
+      emailResult = await Promise.race([emailPromise, timeoutPromise]) as { success: boolean; error?: string; code?: string; response?: string };
     } catch (emailError: any) {
       console.error('❌ Email sending failed:', emailError.message);
       emailResult = { success: false, error: emailError.message };
@@ -151,8 +151,23 @@ export const forgotPassword = async (req: Request, res: Response, next: NextFunc
 
     if (emailResult.success) {
       console.log('✅ Password reset email sent successfully');
+      console.log('📧 Email delivered to:', email);
     } else {
-      console.log('📧 Email failed - will return reset URL in response for fallback');
+      console.error('❌ Email failed to send!');
+      console.error('❌ Error:', emailResult.error);
+      console.error('❌ Error Code:', emailResult.code);
+      console.error('❌ Error Response:', emailResult.response);
+      console.error('📧 Reset URL (fallback):', resetUrl);
+      console.error('📧 Target Email:', email);
+
+      // Log environment variables (without sensitive data)
+      console.error('📧 Environment Check:');
+      console.error('  - BREVO_SMTP_HOST:', process.env.BREVO_SMTP_HOST || 'NOT SET');
+      console.error('  - BREVO_SMTP_PORT:', process.env.BREVO_SMTP_PORT || 'NOT SET');
+      console.error('  - BREVO_SMTP_USER:', process.env.BREVO_SMTP_USER ? 'SET' : 'NOT SET');
+      console.error('  - BREVO_SMTP_PASS:', process.env.BREVO_SMTP_PASS ? 'SET (length: ' + process.env.BREVO_SMTP_PASS.length + ')' : 'NOT SET');
+      console.error('  - BREVO_FROM_EMAIL:', process.env.BREVO_FROM_EMAIL || 'NOT SET');
+      console.error('  - FRONTEND_URL:', process.env.FRONTEND_URL || 'NOT SET');
     }
 
     // Always return reset URL for fallback (security: same message shown)

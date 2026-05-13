@@ -49,6 +49,11 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
       return { success: true, message: 'Email logged (SMTP not configured)' };
     }
 
+    console.log('📧 Attempting to send email...');
+    console.log('📧 To:', to);
+    console.log('📧 From:', `"${fromName}" <${fromEmail}>`);
+    console.log('📧 Subject:', subject);
+
     const info = await transporter.sendMail({
       from: `"${fromName}" <${fromEmail}>`,
       to,
@@ -58,12 +63,24 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
 
     console.log('✅ Email sent successfully!');
     console.log('📧 Message ID:', info.messageId);
-    console.log('📧 To:', to);
-    console.log('📧 From:', fromEmail);
+    console.log('📧 Response:', info.response);
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
-    console.error('❌ Email sending failed:', error.message);
-    return { success: false, error: error.message };
+    console.error('❌ Email sending failed!');
+    console.error('❌ Error Message:', error.message);
+    console.error('❌ Error Code:', error.code);
+    console.error('❌ Error Response:', error.response);
+    console.error('❌ Full Error:', JSON.stringify(error, null, 2));
+
+    // Log configuration for debugging
+    console.error('📧 Email Configuration:');
+    console.error('  - Host:', smtpHost);
+    console.error('  - Port:', smtpPort);
+    console.error('  - User:', smtpUser);
+    console.error('  - From Email:', fromEmail);
+    console.error('  - To Email:', to);
+
+    return { success: false, error: error.message, code: error.code, response: error.response };
   }
 };
 
