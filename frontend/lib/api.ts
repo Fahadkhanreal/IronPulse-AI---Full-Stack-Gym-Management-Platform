@@ -9,34 +9,38 @@ const api = axios.create({
   },
 });
 
-// Request interceptor: Attach JWT token (except for public endpoints)
+// Request interceptor: Attach JWT token (except for public GET endpoints)
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      // Public endpoints that don't need authentication
-      const publicEndpoints = [
+      const method = (config.method || 'get').toUpperCase();
+      const url = config.url || '';
+
+      // Public GET endpoints that don't need authentication
+      const publicGetEndpoints = [
         '/plans',
         '/trainers',
+        '/testimonials',
         '/auth/login',
         '/auth/signup',
         '/auth/forgot-password',
         '/auth/reset-password',
       ];
 
-      // Check if the request URL matches any public endpoint (exact match or with query params)
-      const isPublicEndpoint = publicEndpoints.some(endpoint => {
-        const url = config.url || '';
-        // Exact match or starts with endpoint followed by ? (query params)
+      // Check if this is a public GET request (exact match or with query params)
+      const isPublicGetRequest = method === 'GET' && publicGetEndpoints.some(endpoint => {
         return url === endpoint || url.startsWith(endpoint + '?');
       });
 
-      // Special case: /testimonials (public) but NOT /testimonials/my/* or /testimonials/admin/*
-      const isPublicTestimonials =
-        config.url === '/testimonials' ||
-        config.url?.startsWith('/testimonials?');
+      // Special case: /testimonials GET is public, but NOT /testimonials/my/* or /testimonials/admin/*
+      const isPublicTestimonialsGet =
+        method === 'GET' &&
+        (url === '/testimonials' || url.startsWith('/testimonials?'));
 
-      // Only attach token for non-public endpoints
-      if (!isPublicEndpoint && !isPublicTestimonials) {
+      // Attach token for all requests EXCEPT public GET requests
+      const needsAuth = !isPublicGetRequest || (url.includes('/testimonials/') && !isPublicTestimonialsGet);
+
+      if (needsAuth) {
         const token = localStorage.getItem('token');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
