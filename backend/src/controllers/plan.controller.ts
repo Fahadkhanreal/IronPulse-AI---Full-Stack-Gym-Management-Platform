@@ -48,7 +48,7 @@ export const getPlanById = async (req: Request, res: Response, next: NextFunctio
 
 export const createPlan = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { title, price, duration, features } = req.body as CreatePlanInput;
+    const { title, price, duration, features, stripePriceId } = req.body as CreatePlanInput & { stripePriceId?: string };
 
     const plan = await prisma.plan.create({
       data: {
@@ -56,6 +56,8 @@ export const createPlan = async (req: Request, res: Response, next: NextFunction
         price,
         duration,
         features,
+        // Convert empty string to null to avoid unique constraint issues
+        stripePriceId: stripePriceId === '' ? null : stripePriceId,
       },
     });
 
@@ -82,9 +84,15 @@ export const updatePlan = async (req: Request, res: Response, next: NextFunction
       return res.status(404).json(error('Plan not found', `No plan found with ID: ${id}`));
     }
 
+    // Convert empty string stripePriceId to null to avoid unique constraint violation
+    const dataToUpdate = {
+      ...updateData,
+      stripePriceId: updateData.stripePriceId === '' ? null : updateData.stripePriceId,
+    };
+
     const updatedPlan = await prisma.plan.update({
       where: { id },
-      data: updateData,
+      data: dataToUpdate,
     });
 
     // Invalidate cache when plan is updated
