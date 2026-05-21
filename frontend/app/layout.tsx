@@ -13,8 +13,11 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+const ogImageUrl = new URL('/og-image.jpg', siteUrl).toString();
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "IronPulse Gym - Transform Your Body, Forge Your Strength",
     template: "%s | IronPulse Gym"
@@ -32,13 +35,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "/",
+    url: siteUrl,
     siteName: "IronPulse Gym",
     title: "IronPulse Gym - Transform Your Body, Forge Your Strength",
     description: "State-of-the-art fitness facilities with expert trainers, flexible membership plans, and 24/7 access. Start your fitness journey today.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: "IronPulse Gym - Modern Fitness Center",
@@ -49,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "IronPulse Gym - Transform Your Body, Forge Your Strength",
     description: "State-of-the-art fitness facilities with expert trainers and flexible membership plans.",
-    images: ["/og-image.jpg"],
+    images: [ogImageUrl],
     creator: "@ironpulsegym",
   },
   robots: {
@@ -79,7 +82,7 @@ export default function RootLayout({
     '@type': 'HealthAndFitnessClub',
     name: 'IronPulse Gym',
     description: 'State-of-the-art fitness facility with expert trainers and flexible membership plans',
-    url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    url: siteUrl,
     telephone: '+1-555-123-4567',
     email: 'info@ironpulse.com',
     address: {
